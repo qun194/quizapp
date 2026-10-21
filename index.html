@@ -10,9 +10,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- QRCode.js Library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-    <!-- MathJax for LaTeX Rendering -->
-    <script src="https://polyfill.io/v3/polyfill.min.min.js?features=es6"></script>
-    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
         body {
@@ -59,7 +56,7 @@
                 <div class="w-16 h-16 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center mx-auto mb-3 text-2xl">
                     <i class="fa-solid fa-user-pen"></i>
                 </div>
-                <h2 class="text-2xl font-bold text-gray-800">Thông Tin Thi Sinh</h2>
+                <h2 class="text-2xl font-bold text-gray-800">Thông Tin Thí Sinh</h2>
                 <p class="text-sm text-gray-500 mt-1">Vui lòng nhập họ và tên để bắt đầu bài làm</p>
             </div>
 
@@ -153,7 +150,7 @@
                     </button>
                     <button onclick="restartQuiz()" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2.5 px-4 rounded-xl transition flex items-center justify-center space-x-2 text-sm shadow">
                         <i class="fa-solid fa-rotate-right"></i>
-                        <span>Làm Lai Bài</span>
+                        <span>Làm Lại Bài</span>
                     </button>
                 </div>
             </div>
@@ -168,19 +165,19 @@
 
     <!-- JavaScript Logic -->
     <script>
-        // Danh sách câu hỏi
+        // Danh sách câu hỏi (Đã bỏ hoàn toàn dấu $)
         const quizData = [
             {
                 id: 1,
                 type: "mcq",
-                question: "Một nguyên tử $X$ có tổng số hạt cơ bản (proton, neutron, electron) là $58$. Biết rằng số hạt mang điện nhiều hơn số hạt không mang điện là $18$ hạt. Khẳng định nào sau đây là đúng nhất về nguyên tử $X$?",
+                question: "Một nguyên tử X có tổng số hạt cơ bản (proton, neutron, electron) là 58. Biết rằng số hạt mang điện nhiều hơn số hạt không mang điện là 18 hạt. Khẳng định nào sau đây là đúng nhất về nguyên tử X?",
                 options: [
-                    { key: "A", text: "Nguyên tử $X$ có $19$ proton, thuộc về nguyên tố Potassium (K)." },
-                    { key: "B", text: "Hạt nhân nguyên tử $X$ chứa tổng cộng $38$ hạt mang điện và không mang điện." },
-                    { key: "C", text: "Số hạt electron của $X$ là $20$ và khối lượng nguyên tử $X$ xấp xỉ bằng $39\\text{ amu}$." },
-                    { key: "D", text: "Nguyên tử $X$ có $19$ proton, $20$ neutron, $19$ electron và điện tích hạt nhân là $+19$." },
-                    { key: "E", text: "Tỉ số giữa số hạt không mang điện và số hạt mang điện trong nguyên tử $X$ là $\\frac{20}{38} = \\frac{10}{19}$." },
-                    { key: "F", text: "Nguyên tử $X$ có tổng số hạt trong hạt nhân là $39$, trong đó số proton bằng số neutron." },
+                    { key: "A", text: "Nguyên tử X có 19 proton, thuộc về nguyên tố Potassium (K)." },
+                    { key: "B", text: "Hạt nhân nguyên tử X chứa tổng cộng 38 hạt mang điện và không mang điện." },
+                    { key: "C", text: "Số hạt electron của X là 20 và khối lượng nguyên tử X xấp xỉ bằng 39 amu." },
+                    { key: "D", text: "Nguyên tử X có 19 proton, 20 neutron, 19 electron và điện tích hạt nhân là +19." },
+                    { key: "E", text: "Tỉ số giữa số hạt không mang điện và số hạt mang điện trong nguyên tử X là 20/38 = 10/19." },
+                    { key: "F", text: "Nguyên tử X có tổng số hạt trong hạt nhân là 39, trong đó số proton bằng số neutron." },
                     { key: "G", text: "Cả D và E đều đúng." }
                 ],
                 correct: "G"
@@ -188,85 +185,85 @@
             {
                 id: 2,
                 type: "mcq",
-                question: "Cho các phát biểu sau về cấu tạo nguyên tử và mô hình nguyên tử:<br>1. Trong nguyên tử, khối lượng tập trung chủ yếu ở hạt nhân vì khối lượng của electron rất nhỏ so với proton và neutron.<br>2. Vỏ nguyên tử Rutherford - Bohr gồm các electron chuyển động xung quanh hạt nhân theo những quỹ đạo xác định giống như các hành tinh quay quanh Mặt Trời.<br>3. Nguyên tử luôn trung hòa về điện, do đó số proton bằng số neutron.<br>4. Lớp electron trong cùng (lớp thứ nhất, gần hạt nhân nhất) chứa tối đa $8$ electron.<br>5. Đường kính của hạt nhân nguyên tử nhỏ hơn đường kính nguyên tử khoảng $10.000$ đến $100.000$ lần.<br>6. Điện tích của một proton có giá trị bằng điện tích của một electron về độ lớn nhưng trái dấu.<br><br><b>Số phát biểu ĐÚNG là:</b>",
+                question: "Cho các phát biểu sau về cấu tạo nguyên tử và mô hình nguyên tử:<br>1. Trong nguyên tử, khối lượng tập trung chủ yếu ở hạt nhân vì khối lượng của electron rất nhỏ so với proton và neutron.<br>2. Vỏ nguyên tử Rutherford - Bohr gồm các electron chuyển động xung quanh hạt nhân theo những quỹ đạo xác định giống như các hành tinh quay quanh Mặt Trời.<br>3. Nguyên tử luôn trung hòa về điện, do đó số proton bằng số neutron.<br>4. Lớp electron trong cùng (lớp thứ nhất, gần hạt nhân nhất) chứa tối đa 8 electron.<br>5. Đường kính của hạt nhân nguyên tử nhỏ hơn đường kính nguyên tử khoảng 10.000 đến 100.000 lần.<br>6. Điện tích của một proton có giá trị bằng điện tích của một electron về độ lớn nhưng trái dấu.<br><br><b>Số phát biểu ĐÚNG là:</b>",
                 options: [
-                    { key: "A", text: "$2$" },
-                    { key: "B", text: "$3$" },
-                    { key: "C", text: "$4$" },
-                    { key: "D", text: "$5$" },
-                    { key: "E", text: "$6$" },
-                    { key: "F", text: "$1$" },
-                    { key: "G", text: "$0$" }
+                    { key: "A", text: "2" },
+                    { key: "B", text: "3" },
+                    { key: "C", text: "4" },
+                    { key: "D", text: "5" },
+                    { key: "E", text: "6" },
+                    { key: "F", text: "1" },
+                    { key: "G", text: "0" }
                 ],
                 correct: "C"
             },
             {
                 id: 3,
                 type: "mcq",
-                question: "Nguyên tử $Y$ có tổng số hạt cơ bản là $36$. Trong hạt nhân nguyên tử $Y$, số hạt mang điện bằng số hạt không mang điện. Một nguyên tử $Z$ khác có số proton nhiều hơn $Y$ là $3$ hạt và số neutron nhiều hơn $Y$ là $4$ hạt. Cho các nhận định sau:<br>(1) Nguyên tử $Y$ có $12$ proton, $12$ neutron và $12$ electron.<br>(2) Nguyên tử $Z$ có điện tích hạt nhân là $+15$.<br>(3) Khối lượng nguyên tử $Z$ ước tính xấp xỉ $31\\text{ amu}$.<br>(4) Số hạt mang điện của nguyên tử $Z$ nhiều hơn số hạt mang điện của nguyên tử $Y$ là $6$ hạt.<br><br><b>Có bao nhiêu nhận định ĐÚNG trong các nhận định trên?</b>",
+                question: "Nguyên tử Y có tổng số hạt cơ bản là 36. Trong hạt nhân nguyên tử Y, số hạt mang điện bằng số hạt không mang điện. Một nguyên tử Z khác có số proton nhiều hơn Y là 3 hạt và số neutron nhiều hơn Y là 4 hạt. Cho các nhận định sau:<br>(1) Nguyên tử Y có 12 proton, 12 neutron và 12 electron.<br>(2) Nguyên tử Z có điện tích hạt nhân là +15.<br>(3) Khối lượng nguyên tử Z ước tính xấp xỉ 31 amu.<br>(4) Số hạt mang điện của nguyên tử Z nhiều hơn số hạt mang điện của nguyên tử Y là 6 hạt.<br><br><b>Có bao nhiêu nhận định ĐÚNG trong các nhận định trên?</b>",
                 options: [
-                    { key: "A", text: "Tất cả $4$ nhận định đều đúng." },
-                    { key: "B", text: "Chỉ có $1$ nhận định đúng." },
-                    { key: "C", text: "Chỉ có $2$ nhận định đúng." },
-                    { key: "D", text: "Chỉ có $3$ nhận định đúng." },
+                    { key: "A", text: "Tất cả 4 nhận định đều đúng." },
+                    { key: "B", text: "Chỉ có 1 nhận định đúng." },
+                    { key: "C", text: "Chỉ có 2 nhận định đúng." },
+                    { key: "D", text: "Chỉ có 3 nhận định đúng." },
                     { key: "E", text: "Không có nhận định nào đúng." },
-                    { key: "F", text: "Có $2$ nhận định sai là (1) và (3)." },
-                    { key: "G", text: "Có $1$ nhận định sai là (2)." }
+                    { key: "F", text: "Có 2 nhận định sai là (1) và (3)." },
+                    { key: "G", text: "Có 1 nhận định sai là (2)." }
                 ],
                 correct: "A"
             },
             {
                 id: 4,
                 type: "mcq",
-                question: "Tổng số hạt $p, n, e$ trong hai nguyên tử $A$ và $B$ là $142$ hạt, trong đó tổng số hạt mang điện nhiều hơn tổng số hạt không mang điện là $42$ hạt. Số hạt mang điện của nguyên tử $B$ nhiều hơn số hạt mang điện của nguyên tử $A$ là $12$ hạt. Điện tích hạt nhân của nguyên tử $A$ và $B$ lần lượt là:",
+                question: "Tổng số hạt p, n, e trong hai nguyên tử A và B là 142 hạt, trong đó tổng số hạt mang điện nhiều hơn tổng số hạt không mang điện là 42 hạt. Số hạt mang điện của nguyên tử B nhiều hơn số hạt mang điện của nguyên tử A là 12 hạt. Điện tích hạt nhân của nguyên tử A và B lần lượt là:",
                 options: [
-                    { key: "A", text: "$+17$ và $+23$" },
-                    { key: "B", text: "$+20$ và $+26$" },
-                    { key: "C", text: "$+12$ và $+18$" },
-                    { key: "D", text: "$+15$ và $+21$" },
-                    { key: "E", text: "$+18$ và $+24$" },
-                    { key: "F", text: "$+19$ và $+25$" },
-                    { key: "G", text: "$+16$ và $+22$" }
+                    { key: "A", text: "+17 và +23" },
+                    { key: "B", text: "+20 và +26" },
+                    { key: "C", text: "+12 và +18" },
+                    { key: "D", text: "+15 và +21" },
+                    { key: "E", text: "+18 và +24" },
+                    { key: "F", text: "+19 và +25" },
+                    { key: "G", text: "+16 và +22" }
                 ],
                 correct: "F"
             },
             {
                 id: 5,
                 type: "mcq",
-                question: "Tổng số hạt cơ bản trong $3$ nguyên tử $M, N, P$ là $82$ hạt. Trong đó, số hạt mang điện nhiều hơn số hạt không mang điện là $22$ hạt. Tổng số hạt trong nguyên tử $N$ nhiều hơn trong nguyên tử $M$ là $6$ hạt. Số hạt không mang điện của $P$ bằng trung bình cộng số hạt không mang điện của $M$ và $N$. Biết nguyên tử $M$ có số $p = n$. Kết luận nào sau đây <b>SAI</b>?",
+                question: "Tổng số hạt cơ bản trong 3 nguyên tử M, N, P là 82 hạt. Trong đó, số hạt mang điện nhiều hơn số hạt không mang điện là 22 hạt. Tổng số hạt trong nguyên tử N nhiều hơn trong nguyên tử M là 6 hạt. Số hạt không mang điện của P bằng trung bình cộng số hạt không mang điện của M và N. Biết nguyên tử M có số p = n. Kết luận nào sau đây <b>SAI</b>?",
                 options: [
-                    { key: "A", text: "Nguyên tử $M$ có số proton là $8$." },
-                    { key: "B", text: "Nguyên tử $N$ có số proton là $10$." },
-                    { key: "C", text: "Nguyên tử $P$ có $8$ proton và $10$ neutron." },
-                    { key: "D", text: "Điện tích hạt nhân của nguyên tử $N$ là $+10$." },
-                    { key: "E", text: "Khối lượng nguyên tử $M$ là $16\\text{ amu}$." },
-                    { key: "F", text: "Tổng số electron của cả $3$ nguyên tử $M, N, P$ bằng $26$." },
-                    { key: "G", text: "Số neutron của nguyên tử $P$ bằng $9$." }
+                    { key: "A", text: "Nguyên tử M có số proton là 8." },
+                    { key: "B", text: "Nguyên tử N có số proton là 10." },
+                    { key: "C", text: "Nguyên tử P có 8 proton và 10 neutron." },
+                    { key: "D", text: "Điện tích hạt nhân của nguyên tử N là +10." },
+                    { key: "E", text: "Khối lượng nguyên tử M là 16 amu." },
+                    { key: "F", text: "Tổng số electron của cả 3 nguyên tử M, N, P bằng 26." },
+                    { key: "G", text: "Số neutron của nguyên tử P bằng 9." }
                 ],
                 correct: "C"
             },
             {
                 id: 6,
                 type: "short",
-                question: "Tổng số hạt cơ bản ($p, n, e$) trong hai nguyên tử của nguyên tố $X$ và $Y$ là $90$. Số hạt mang điện của nguyên tử $Y$ nhiều hơn số hạt mang điện của nguyên tử $X$ là $12$ hạt. Trong nguyên tử $X$, số hạt không mang điện bằng số hạt mang điện âm. Trong nguyên tử $Y$, số hạt mang điện nhiều hơn số hạt không mang điện là $8$ hạt. Tính tổng khối lượng ước tính (theo đơn vị $\\text{amu}$) của $1$ nguyên tử $X$ và $1$ nguyên tử $Y$.<br><i class='text-xs text-indigo-600 font-normal'>(Gợi ý nhập kết quả: Điền một số nguyên)</i>",
+                question: "Tổng số hạt cơ bản (p, n, e) trong hai nguyên tử của nguyên tố X và Y là 90. Số hạt mang điện của nguyên tử Y nhiều hơn số hạt mang điện của nguyên tử X là 12 hạt. Trong nguyên tử X, số hạt không mang điện bằng số hạt mang điện âm. Trong nguyên tử Y, số hạt mang điện nhiều hơn số hạt không mang điện là 8 hạt. Tính tổng khối lượng ước tính (theo đơn vị amu) của 1 nguyên tử X và 1 nguyên tử Y.<br><i class='text-xs text-indigo-600 font-normal'>(Gợi ý nhập kết quả: Điền một số nguyên)</i>",
                 correct: "60"
             },
             {
                 id: 7,
                 type: "short",
-                question: "Một nguyên tử $M$ có tổng số hạt cơ bản là $49$. Biết rằng số hạt mang điện nhiều hơn số hạt không mang điện là $15$ hạt. Nguyên tử $M$ này nhường đi $2$ electron để trở thành một hạt mang điện dương (gọi là ion $M^{2+}$). Hỏi trong hạt ion $M^{2+}$ đó, tổng số hạt mang điện là bao nhiêu?<br><i class='text-xs text-indigo-600 font-normal'>(Gợi ý nhập kết quả: Điền một số nguyên)</i>",
+                question: "Một nguyên tử M có tổng số hạt cơ bản là 49. Biết rằng số hạt mang điện nhiều hơn số hạt không mang điện là 15 hạt. Nguyên tử M này nhường đi 2 electron để trở thành một hạt mang điện dương (gọi là ion M2+). Hỏi trong hạt ion M2+ đó, tổng số hạt mang điện là bao nhiêu?<br><i class='text-xs text-indigo-600 font-normal'>(Gợi ý nhập kết quả: Điền một số nguyên)</i>",
                 correct: "30"
             },
             {
                 id: 8,
                 type: "short",
-                question: "Trung bình cứ $10.000$ nguyên tử của nguyên tố $A$ thì có đường kính hạt nhân xấp xỉ $2 \\times 10^{-15}\\text{ m}$. Biết đường kính của toàn bộ nguyên tử $A$ lớn gấp $20.000$ lần đường kính hạt nhân của nó. Hỏi đường kính của một nguyên tử $A$ bằng bao nhiêu picomét ($\\text{pm}$)? Biết $1\\text{ pm} = 10^{-12}\\text{ m}$.<br><i class='text-xs text-indigo-600 font-normal'>(Gợi ý nhập kết quả: Điền một số nguyên)</i>",
+                question: "Trung bình cứ 10.000 nguyên tử của nguyên tố A thì có đường kính hạt nhân xấp xỉ 2 x 10^-15 m. Biết đường kính của toàn bộ nguyên tử A lớn gấp 20.000 lần đường kính hạt nhân của nó. Hỏi đường kính của một nguyên tử A bằng bao nhiêu picomét (pm)? Biết 1 pm = 10^-12 m.<br><i class='text-xs text-indigo-600 font-normal'>(Gợi ý nhập kết quả: Điền một số nguyên)</i>",
                 correct: "40"
             },
             {
                 id: 9,
                 type: "short",
-                question: "Cho hợp chất $ZX_2$ có tổng số hạt cơ bản ($p, n, e$) cấu tạo nên phân tử là $96$ hạt. Trong đó, tổng số hạt mang điện nhiều hơn số hạt không mang điện là $32$ hạt. Số hạt mang điện của nguyên tử $Z$ ít hơn số hạt mang điện của một nguyên tử $X$ là $8$ hạt. Hãy xác định tổng số hạt neutron ($n$) có trong toàn bộ phân tử $ZX_2$.<br><i class='text-xs text-indigo-600 font-normal'>(Gợi ý nhập kết quả: Điền một số nguyên)</i>",
+                question: "Cho hợp chất ZX2 có tổng số hạt cơ bản (p, n, e) cấu tạo nên phân tử là 96 hạt. Trong đó, tổng số hạt mang điện nhiều hơn số hạt không mang điện là 32 hạt. Số hạt mang điện của nguyên tử Z ít hơn số hạt mang điện của một nguyên tử X là 8 hạt. Hãy xác định tổng số hạt neutron (n) có trong toàn bộ phân tử ZX2.<br><i class='text-xs text-indigo-600 font-normal'>(Gợi ý nhập kết quả: Điền một số nguyên)</i>",
                 correct: "32"
             }
         ];
@@ -361,11 +358,6 @@
 
                 container.appendChild(qCard);
             });
-
-            // Trigger MathJax re-render cho LaTeX
-            if (window.MathJax) {
-                MathJax.typesetPromise();
-            }
         }
 
         // Lưu câu trả lời trắc nghiệm
@@ -455,13 +447,12 @@
             generateQR();
         }
 
-        // Tạo mã QR xác thực kết quả (Đã tối ưu ký tự tránh tràn độ dài)
+        // Tạo mã QR xác thực kết quả
         function generateQR() {
             const qrContainer = document.getElementById("qrcode-box");
             qrContainer.innerHTML = "";
 
-            // Chuỗi dữ liệu QR tối giản siêu gọn
-            const qrData = `NAME:${studentName}|SCORE:${finalUnroundedScore}|CORRECT:${correctCount}/${quizData.length}|TIME:${durationFormatted}|VERIFY:${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
+            const qrData = `NAME:${studentName}|SCORE:${finalUnroundedScore}|CORRECT:${correctCount}/${quizData.length}|TIME:${durationFormatted}`;
 
             try {
                 new QRCode(qrContainer, {
@@ -470,7 +461,7 @@
                     height: 160,
                     colorDark: "#1e1b4b",
                     colorLight: "#ffffff",
-                    correctLevel: QRCode.CorrectLevel.L // Mức sửa lỗi L giúp chứa dung lượng tối đa
+                    correctLevel: QRCode.CorrectLevel.L
                 });
             } catch (err) {
                 console.error("Lỗi tạo mã QR:", err);

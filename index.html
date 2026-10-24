@@ -14,20 +14,41 @@
             font-family: 'Inter', sans-serif;
             background-color: #f3f4f6;
         }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
     </style>
 </head>
-<body class="min-h-screen text-gray-800 flex flex-col justify-between">
+<body class="min-h-screen text-gray-800 flex flex-col justify-between relative">
 
     <!-- Header -->
-    <header class="bg-indigo-600 text-white shadow-md sticky top-0 z-50">
+    <header class="bg-indigo-600 text-white shadow-md sticky top-0 z-40">
         <div class="max-w-4xl mx-auto px-4 py-3 flex justify-between items-center">
             <div class="flex items-center space-x-3">
                 <i class="fa-solid fa-graduation-cap text-2xl text-yellow-300"></i>
                 <h1 class="font-bold text-lg md:text-xl tracking-wide">QuiizzApp - Bài Tập Online</h1>
             </div>
-            <div id="header-timer" class="hidden flex items-center space-x-2 bg-indigo-700 px-3 py-1.5 rounded-lg text-sm font-semibold">
-                <i class="fa-regular fa-clock text-yellow-300"></i>
-                <span id="timer-display">00:00</span>
+            <div class="flex items-center space-x-3">
+                <div id="header-timer" class="hidden flex items-center space-x-2 bg-indigo-700 px-3 py-1.5 rounded-lg text-sm font-semibold">
+                    <i class="fa-regular fa-clock text-yellow-300"></i>
+                    <span id="timer-display">00:00</span>
+                </div>
+                <!-- Nút mở trợ lý Chemistry trên Header -->
+                <button onclick="toggleChemistryChat()" class="bg-gradient-to-r from-purple-500 to-indigo-500 hover:from-purple-600 hover:to-indigo-600 text-white px-3.5 py-1.5 rounded-lg text-sm font-bold shadow flex items-center space-x-2 transition">
+                    <i class="fa-solid fa-robot text-yellow-300"></i>
+                    <span class="hidden sm:inline">Trợ lý Chemistry</span>
+                </button>
             </div>
         </div>
     </header>
@@ -35,7 +56,7 @@
     <!-- Main Container -->
     <main class="max-w-4xl mx-auto px-4 py-6 flex-1 w-full">
 
-        <!-- MÀN HÌNH BẮT ĐẦU (CHỌN BÀI TẬP & NHẬP TÊN) -->
+        <!-- MÀN HÌNH BẮT ĐẦU -->
         <div id="screen-start" class="bg-white rounded-2xl shadow-lg p-6 md:p-8 max-w-lg mx-auto border border-gray-100">
             <div class="text-center mb-6">
                 <div class="w-16 h-16 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center mx-auto mb-3 text-2xl">
@@ -53,13 +74,20 @@
                 </div>
 
                 <div class="mb-6">
-                    <label class="block text-sm font-semibold text-gray-700 mb-2">Chọn Bài Tập <span class="text-red-500">*</span></label>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Chọn Bài Tập / Đề Thi <span class="text-red-500">*</span></label>
                     <div class="space-y-3">
                         <label class="flex items-center p-3.5 border-2 border-indigo-100 rounded-xl cursor-pointer hover:border-indigo-500 transition">
-                            <input type="radio" name="quiz_select" value="quiz_atom" checked class="w-4 h-4 text-indigo-600 focus:ring-indigo-500">
+                            <input type="radio" name="quiz_select" value="quiz_midterm" checked class="w-4 h-4 text-indigo-600 focus:ring-indigo-500">
                             <div class="ml-3">
-                                <span class="block text-sm font-bold text-gray-800">Bài tập nguyên tử</span>
-                                <span class="block text-xs text-amber-600 font-medium">Hạn 23H Ngày 23/10/2026 (9 câu)</span>
+                                <span class="block text-sm font-bold text-gray-800">Đề 1 Ôn tập giữa kì 1</span>
+                                <span class="block text-xs text-indigo-600 font-medium">Hạn 23H59 Ngày 25/10/2026 (23 câu)</span>
+                            </div>
+                        </label>
+                        <label class="flex items-center p-3.5 border-2 border-indigo-100 rounded-xl cursor-pointer hover:border-indigo-500 transition">
+                            <input type="radio" name="quiz_select" value="quiz_bonding" class="w-4 h-4 text-indigo-600 focus:ring-indigo-500">
+                            <div class="ml-3">
+                                <span class="block text-sm font-bold text-gray-800">Bài tập 1: Phân tử - Liên kết hóa học</span>
+                                <span class="block text-xs text-emerald-600 font-medium">Hạn 23H59 Ngày 26/10/2026 (15 câu)</span>
                             </div>
                         </label>
                         <label class="flex items-center p-3.5 border-2 border-indigo-100 rounded-xl cursor-pointer hover:border-indigo-500 transition">
@@ -166,6 +194,56 @@
 
     </main>
 
+    <!-- TRỢ LÝ ẢO CHEMISTRY - MODAL CHAT -->
+    <div id="chemistry-modal" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-2xl rounded-2xl shadow-2xl flex flex-col h-[85vh] md:h-[80vh] overflow-hidden border border-gray-200 animate-fadeIn">
+            <!-- Modal Header -->
+            <div class="bg-gradient-to-r from-purple-600 to-indigo-600 text-white px-5 py-4 flex justify-between items-center shadow">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center text-xl text-yellow-300">
+                        <i class="fa-solid fa-robot"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-lg">Trợ lý ảo Chemistry</h3>
+                        <p class="text-xs text-purple-200">Sẵn sàng hướng dẫn cách chọn đáp án & giải bài tập</p>
+                    </div>
+                </div>
+                <button onclick="toggleChemistryChat()" class="text-white hover:text-gray-200 text-xl font-bold w-9 h-9 flex items-center justify-center rounded-full hover:bg-white/10 transition">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <!-- Quick Suggestions / 50 Scenarios Selector -->
+            <div class="bg-purple-50 px-4 py-2.5 border-b border-purple-100 flex items-center justify-between text-xs text-purple-700">
+                <span class="font-semibold"><i class="fa-solid fa-lightbulb text-amber-500 mr-1"></i> Gợi ý tình huống hỏi nhanh:</span>
+                <select id="scenario-selector" onchange="selectScenario(this.value)" class="bg-white border border-purple-200 rounded-lg px-2.5 py-1 text-xs text-purple-900 font-medium outline-none focus:ring-1 focus:ring-purple-500 max-w-[240px] truncate">
+                    <option value="">-- Chọn 1 trong 50 tình huống hỏi --</option>
+                </select>
+            </div>
+
+            <!-- Chat Messages Box -->
+            <div id="chat-messages" class="flex-1 p-4 overflow-y-auto space-y-4 custom-scrollbar bg-slate-50 text-sm">
+                <div class="flex items-start space-x-3">
+                    <div class="w-8 h-8 rounded-full bg-purple-600 text-white flex items-center justify-center shrink-0 font-bold text-xs">
+                        <i class="fa-solid fa-robot"></i>
+                    </div>
+                    <div class="bg-white p-3.5 rounded-2xl shadow-sm border border-gray-100 max-w-[85%] text-gray-700 leading-relaxed">
+                        Chào bạn! Tôi là <b>Chemistry</b> - trợ lý ảo môn Khoa học tự nhiên & Hóa học. Bạn cần tôi hướng dẫn cách chọn đáp án phần nào hay muốn giải bài tập dạng nào? Hãy chọn câu hỏi gợi ý ở trên hoặc nhắn trực tiếp cho tôi nhé!
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chat Input Form -->
+            <form id="chat-form" onsubmit="event.preventDefault(); sendChemistryMessage();" class="p-3 bg-white border-t border-gray-200 flex items-center space-x-2">
+                <input type="text" id="chat-input" placeholder="Hỏi Chemistry cách chọn đáp án, công thức, mẹo giải..."
+                    class="flex-1 px-4 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none text-sm text-gray-800">
+                <button type="submit" class="bg-purple-600 hover:bg-purple-700 text-white px-5 py-2.5 rounded-xl font-bold transition flex items-center justify-center text-sm shadow">
+                    <i class="fa-solid fa-paper-plane"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+
     <!-- Footer -->
     <footer class="bg-white border-t border-gray-200 py-4 text-center text-xs text-gray-500">
         <p>© 2026 QuiizzApp - Bài Tập Online. All rights reserved.</p>
@@ -173,97 +251,537 @@
 
     <!-- JavaScript Logic -->
     <script>
-        // BỘ CÂU HỎI 1: BÀI TẬP NGUYÊN TỬ (Hạn 23H Ngày 23/10/2026)
-        const quizAtom = [
+        // ==========================================
+        // 50 TÌNH HUỐNG HỎI & HƯỚNG DẪN TỪ CHEMISTRY
+        // ==========================================
+        const chemistryScenarios = [
+            // Chủ đề 1: Kĩ năng quan sát & đo lường (1-10)
+            { q: "Cách chọn đáp án bài kĩ năng quan sát và thu thập thông tin?", a: "Để chọn đúng kĩ năng quan sát, hãy nhớ quan sát là việc sử dụng trực tiếp các giác quan (mắt, tai, mũi...) hoặc dụng cụ đo để thu nhận thông tin về sự vật, hiện tượng mà không làm thay đổi bản chất của chúng." },
+            { q: "Cách đặt mắt đúng khi đo thể tích chất lỏng bằng ống đong?", a: "Quy tắc vàng: Luôn đặt mắt nhìn NGANG với mực chất lỏng (mặt lõm hoặc mặt lồi của chất lỏng), tuyệt đối không nhìn từ trên xuống hoặc từ dưới lên để tránh sai số thị sai." },
+            { q: "Cách phân biệt kĩ năng quan sát và kĩ năng dự báo?", a: "Quan sát là ghi nhận thực tế hiện tại đang diễn ra; còn dự báo là đưa ra phán đoán, tiên đoán về kết quả hoặc hiện tượng sẽ xảy ra trong tương lai dựa trên dữ liệu thu thập được." },
+            { q: "Làm sao để chọn dụng cụ đo thể tích phù hợp?", a: "Chọn bình đong (ống đong) có GHĐ (Giới hạn đo) lớn hơn thể tích cần đo một chút và ĐCĐ (Độ chia nhỏ nhất) càng nhỏ thì đo càng chính xác." },
+            { q: "Cách tính sai số trong các phép đo thực hành?", a: "Sai số tuyệt đối của một lần đo bằng trị tuyệt đối của hiệu giữa giá trị trung bình và giá trị của lần đo đó. Thường trong trắc nghiệm lớp 6, bạn chọn kết quả đọc trực tiếp trên vạch chia." },
+            { q: "Khi đo chiều dài bằng thước, cách đặt thước thế nào là chuẩn?", a: "Đặt thước dọc theo chiều dài cần đo, vạch số 0 của thước đặt trùng với một đầu của vật, mắt nhìn vuông góc với cạnh thước ở đầu kia." },
+            { q: "Ý nghĩa của giới hạn đo (GHĐ) và độ chia nhỏ nhất (ĐCNH)?", a: "GHĐ là giá trị lớn nhất ghi trên dụng cụ đo; ĐCNH là giá trị giữa hai vạch chia liên tiếp trên dụng cụ." },
+            { q: "Khi nào dùng cân điện tử thay cho cân Rô-béc-vua?", a: "Cân điện tử được dùng khi cần độ chính xác cao và thao tác nhanh trong các thí nghiệm hiện đại." },
+            { q: "Kĩ năng phân loại trong nghiên cứu khoa học là gì?", a: "Là sắp xếp các đối tượng, sự vật có chung đặc điểm thành từng nhóm theo các tiêu chí nhất định." },
+            { q: "Bước nào quan trọng nhất trong phương pháp tìm hiểu tự nhiên?", a: "Bước đặt câu hỏi nghiên cứu và lập kế hoạch kiểm tra giả thuyết là cốt lõi để khám phá khoa học." },
+
+            // Chủ đề 2: Cấu tạo nguyên tử (11-25)
+            { q: "Hạt nhân nguyên tử cấu tạo gồm những hạt nào?", a: "Hạt nhân được cấu tạo bởi 2 loại hạt là Proton (mang điện dương) và Neutron (không mang điện). Riêng nguyên tử Hydrogen thông thường không có neutron." },
+            { q: "Mối quan hệ giữa số proton, số electron và số hiệu nguyên tử Z?", a: "Trong nguyên tử trung hòa về điện: Số proton (p) = Số electron (e) = Số hiệu nguyên tử (Z)." },
+            { q: "Cách tính tổng số hạt cơ bản (p, n, e) trong nguyên tử?", a: "Tổng số hạt = p + n + e. Vì p = e nên Tổng số hạt = 2p + n. (Hoặc tính theo điện tích hạt nhân)." },
+            { q: "Mẹo giải bài toán tổng số hạt (p, n, e) cho trước tổng và điều kiện?", a: "Sử dụng bất đẳng thức nguyên tử: p <= n <= 1.5p. Từ tổng hạt 2p + n = S, bạn thay thế và lập luận tìm ra giá trị p và n chính xác." },
+            { q: "Vì sao khối lượng nguyên tử tập trung hầu như toàn bộ ở hạt nhân?", a: "Vì khối lượng của hạt proton và neutron xấp xỉ 1 amu, trong khi khối lượng electron cực kì nhỏ (chỉ bằng khoảng 1/1836 khối lượng proton) nên ta có thể bỏ qua." },
+            { q: "Thế nào là nguyên tử trung hòa về điện?", a: "Là nguyên tử có số hạt mang điện dương (proton ở hạt nhân) đúng bằng số hạt mang điện âm (electron ở lớp vỏ)." },
+            { q: "Ion âm được hình thành như thế nào từ nguyên tử?", a: "Ion âm được tạo thành khi nguyên tử nhận thêm electron vào lớp vỏ (số e nhiều hơn số p)." },
+            { q: "Ion dương (như X2+) được hình thành như thế nào?", a: "Ion dương được tạo thành khi nguyên tử nhường đi electron (với X2+ là nhường đi 2 electron, số p không đổi)." },
+            { q: "Cách tính số hạt mang điện và không mang điện trong ion?", a: "Số hạt mang điện trong ion gồm (số proton x 2 + số electron còn lại sau khi nhường/nhận). Số hạt không mang điện (neutron) giữ nguyên không đổi." },
+            { q: "Đơn vị đo khối lượng nguyên tử (amu) là gì?", a: "1 amu bằng 1/12 khối lượng của một nguyên tử carbon-12 (khoảng 1.66 x 10^-24 gam)." },
+            { q: "Khối lượng nguyên tử của Carbon bằng bao nhiêu?", a: "Nguyên tử Carbon có khối lượng nguyên tử quy ước là 12 amu." },
+            { q: "Nguyên tử Oxygen có khối lượng bao nhiêu?", a: "Nguyên tử Oxygen có khối lượng nguyên tử quy ước là 16 amu." },
+            { q: "Nguyên tử Hydrogen có khối lượng bao nhiêu?", a: "Nguyên tử Hydrogen có khối lượng nguyên tử quy ước là 1 amu." },
+            { q: "Điện tích hạt nhân được tính bằng gì?", a: "Điện tích hạt nhân bằng tổng điện tích của các proton trong hạt nhân, kí hiệu là +Z (với Z là số proton)." },
+            { q: "Các lớp electron ở vỏ nguyên tử sắp xếp thế nào?", a: "Các electron ở lớp vỏ được sắp xếp thành từng lớp từ trong ra ngoài theo mức năng lượng từ thấp đến cao (tối đa lớp 1 có 2e, lớp 2 có 8e...)." },
+
+            // Chủ đề 3: Nguyên tố hóa học & Bảng tuần hoàn (26-38)
+            { q: "Thế nào là một nguyên tố hóa học?", a: "Tập hợp tất cả các nguyên tử có cùng số proton trong hạt nhân đều thuộc cùng một nguyên tố hóa học." },
+            { q: "Cách nhận biết các nguyên tử thuộc cùng một nguyên tố hóa học?", a: "Chúng bắt buộc phải có CÙNG SỐ PROTON trong hạt nhân, dù số neutron có thể khác nhau (đây gọi là các đồng vị)." },
+            { q: "Ký hiệu hóa học được quy ước viết như thế nào?", a: "Viết bằng 1 hoặc 2 chữ cái: Chữ cái đầu tiên VIẾT HOA (ví dụ: C, N, O), chữ cái thứ hai (nếu có) viết thường (ví dụ: Na, Ca, Cl)." },
+            { q: "Nguyên tắc sắp xếp các nguyên tố trong Bảng tuần hoàn hiện nay?", a: "Các nguyên tố được sắp xếp theo chiều tăng dần của ĐIỆN TÍCH HẠT NHÂN (số proton)." },
+            { q: "Ý nghĩa của số thứ tự ô nguyên tố trong Bảng tuần hoàn?", a: "Số thứ tự ô nguyên tố = Số hiệu nguyên tử = Số proton = Số electron trong nguyên tử trung hòa." },
+            { q: "Chu kì trong Bảng tuần hoàn là gì?", a: "Là hàng ngang chứa các nguyên tố mà nguyên tử của chúng có cùng số lớp electron." },
+            { q: "Nhóm trong Bảng tuần hoàn là gì?", a: "Là cột dọc chứa các nguyên tố có tính chất hóa học tương tự nhau, thường có cùng số electron ở lớp ngoài cùng." },
+            { q: "Nguyên tố kim loại thường nằm ở vị trí nào trong bảng tuần hoàn?", a: "Chiếm phần lớn phía bên trái và ở giữa bảng tuần hoàn." },
+            { q: "Nguyên tố phi kim thường nằm ở đâu?", a: "Nằm ở góc phía trên bên phải của bảng tuần hoàn." },
+            { q: "Đặc điểm của các nguyên tố khí hiếm là gì?", a: "Nằm ở nhóm cuối cùng (nhóm 18 hoặc VIIIA), lớp electron ngoài cùng rất bền vững (8e, riêng He có 2e) nên rất trơ về mặt hóa học." },
+            { q: "Kí hiệu hóa học của Natri (Sodium), Kali (Potassium), Canxi là gì?", a: "Natri là Na, Kali là K, Canxi là Ca." },
+            { q: "Kí hiệu của các phi kim phổ biến như Carbon, Nitrogen, Oxygen, Sắt?", a: "Carbon (C), Nitrogen (N), Oxygen (O), Sắt (Fe)." },
+            { q: "Vì sao các nguyên tố trong cùng một nhóm lại có tính chất hóa học tương tự nhau?", a: "Vì chúng có cùng số electron ở lớp ngoài cùng, đây là yếu tố quyết định khả năng tham gia liên kết hóa học." },
+
+            // Chủ đề 4: Phân tử, Khối lượng phân tử & Hóa trị (39-45)
+            { q: "Phân tử là gì và mang tính chất gì?", a: "Phân tử là hạt đại diện cho chất, gồm một số nguyên tử liên kết với nhau và mang đầy đủ TÍNH CHẤT HÓA HỌC của chất đó." },
+            { q: "Cách tính khối lượng phân tử của một chất?", a: "Khối lượng phân tử bằng TỔNG khối lượng các nguyên tử có trong phân tử (lấy nguyên tử khối nhân với số lượng từng nguyên tử rồi cộng lại, đơn vị là amu)." },
+            { q: "Phân biệt đơn chất và hợp chất?", a: "Đơn chất là chất được tạo nên từ MỘT nguyên tố hóa học (vd: O2, N2, Fe); Hợp chất là chất được tạo nên từ HAI HAY NHIỀU nguyên tố hóa học (vd: H2O, NaCl, CO2)." },
+            { q: "Công thức hóa học cho biết điều gì?", a: "Cho biết thành phần nguyên tố, số lượng nguyên tử của mỗi nguyên tố có trong phân tử và tính được khối lượng phân tử." },
+            { q: "Khí methane (CH4) có khối lượng phân tử là bao nhiêu?", a: "M = 12 (của C) + 4 x 1 (của H) = 16 amu." },
+            { q: "Khối lượng phân tử của nước (H2O) là bao nhiêu?", a: "M = 2 x 1 (của H) + 16 (của O) = 18 amu." },
+            { q: "Khối lượng phân tử của khí carbon dioxide (CO2) là bao nhiêu?", a: "M = 12 (của C) + 2 x 16 (của O) = 44 amu." },
+
+            // Chủ đề 5: Liên kết hóa học (Ion & Cộng hóa trị) (46-50)
+            { q: "Liên kết cộng hóa trị được hình thành như thế nào?", a: "Được hình thành giữa các nguyên tử (thường là phi kim) bằng cách DÙNG CHUNG một hay nhiều cặp electron." },
+            { q: "Liên kết ion được hình thành như thế nào?", a: "Được hình thành do LỰC HÚT TĨNH ĐIỆN giữa các ion mang điện tích trái dấu (ion dương của kim loại và ion âm của phi kim)." },
+            { q: "Tính chất vật lý đặc trưng của hợp chất ion (như NaCl)?", a: "Thường ở trạng thái rắn ở nhiệt độ thường, có nhiệt độ nóng chảy và sôi cao, hòa tan trong nước tạo dung dịch dẫn được điện." },
+            { q: "Tính chất của các chất có liên kết cộng hóa trị (như H2O, CO2)?", a: "Có thể ở trạng thái khí, lỏng hoặc rắn; nhiệt độ nóng chảy và sôi thường thấp hơn hợp chất ion." },
+            { q: "Quy tắc octet (đạt cấu hình khí hiếm) trong liên kết hóa học là gì?", a: "Các nguyên tử xu hướng nhường, nhận hoặc góp chung electron để đạt cấu hình vỏ bền vững giống khí hiếm (thường có 8 electron ở lớp ngoài cùng)." }
+        ];
+
+        // Khởi tạo danh sách 50 tình huống vào Select Box
+        function initScenarioSelector() {
+            const selector = document.getElementById('scenario-selector');
+            chemistryScenarios.forEach((item, index) => {
+                const opt = document.createElement('option');
+                opt.value = index;
+                opt.text = `Tình huống ${index + 1}: ${item.q}`;
+                selector.appendChild(opt);
+            });
+        }
+
+        function selectScenario(index) {
+            if (index === "") return;
+            const item = chemistryScenarios[index];
+            appendChatMessage(item.q, 'user');
+            appendChatMessage(item.a, 'bot');
+            document.getElementById('scenario-selector').value = "";
+        }
+
+        // Bật/tắt modal trợ lý Chemistry
+        function toggleChemistryChat() {
+            const modal = document.getElementById('chemistry-modal');
+            modal.classList.toggle('hidden');
+        }
+
+        // Gửi tin nhắn tới trợ lý Chemistry
+        function sendChemistryMessage() {
+            const input = document.getElementById('chat-input');
+            const text = input.value.trim();
+            if (!text) return;
+
+            appendChatMessage(text, 'user');
+            input.value = "";
+
+            // Xử lý phản hồi thông minh từ Chemistry dựa trên từ khóa
+            setTimeout(() => {
+                let reply = findBestChemistryAnswer(text);
+                appendChatMessage(reply, 'bot');
+            }, 400);
+        }
+
+        function findBestChemistryAnswer(query) {
+            const lowerQ = query.toLowerCase();
+            // Tìm kiếm khớp từ khóa trong 50 tình huống
+            for (let item of chemistryScenarios) {
+                if (item.q.toLowerCase().includes(lowerQ) || lowerQ.split(' ').some(word => word.length > 3 && item.q.toLowerCase().includes(word))) {
+                    return item.a;
+                }
+            }
+            // Trả lời mặc định thông minh nếu không khớp chính xác
+            return `Chào bạn! Về câu hỏi "${query}", trợ lý Chemistry khuyên bạn hãy đọc kĩ đề bài, xác định rõ dữ kiện đã cho và đại lượng cần tìm. Nếu là bài toán tính toán hạt (p, n, e), hãy nhớ công thức tổng hạt 2p + n = Tổng và bất đẳng thức p <= n <= 1.5p nhé!`;
+        }
+
+        function appendChatMessage(text, sender) {
+            const container = document.getElementById('chat-messages');
+            const div = document.createElement('div');
+
+            if (sender === 'user') {
+                div.className = "flex items-start justify-end space-x-3";
+                div.innerHTML = `
+                    <div class="bg-indigo-600 text-white p-3.5 rounded-2xl shadow-sm max-w-[85%] text-right leading-relaxed">
+                        ${text}
+                    </div>
+                    <div class="w-8 h-8 rounded-full bg-indigo-600 text-white flex items-center justify-center shrink-0 font-bold text-xs">
+                        <i class="fa-solid fa-user"></i>
+                    </div>
+                `;
+            } else {
+                div.className = "flex items-start space-x-3";
+                div.innerHTML = `
+                    <div class="w-8 h-8 rounded-full bg-purple-600 text-white flex items-center justify-center shrink-0 font-bold text-xs">
+                        <i class="fa-solid fa-robot"></i>
+                    </div>
+                    <div class="bg-white p-3.5 rounded-2xl shadow-sm border border-gray-100 max-w-[85%] text-gray-700 leading-relaxed">
+                        ${text}
+                    </div>
+                `;
+            }
+
+            container.appendChild(div);
+            container.scrollTop = container.scrollHeight;
+        }
+
+        // BỘ CÂU HỎI MỚI: ĐỀ 1 ÔN TẬP GIỮA KÌ 1
+        const quizMidterm = [
             {
                 id: 1, type: "mcq",
-                question: "Một nguyên tử X có tổng số hạt cơ bản (proton, neutron, electron) là 58. Biết rằng số hạt mang điện nhiều hơn số hạt không mang điện là 18 hạt. Khẳng định nào sau đây là đúng nhất về nguyên tử X?",
+                question: "Câu 1: Kĩ năng nào sau đây giúp chúng ta thu thập thông tin về các hiện tượng tự nhiên bằng các giác quan hoặc dụng cụ đo?",
                 options: [
-                    { key: "A", text: "Nguyên tử X có 19 proton, thuộc về nguyên tố Potassium (K)." },
-                    { key: "B", text: "Hạt nhân nguyên tử X chứa tổng cộng 38 hạt mang điện và không mang điện." },
-                    { key: "C", text: "Số hạt electron của X là 20 và khối lượng nguyên tử X xấp xỉ bằng 39 amu." },
-                    { key: "D", text: "Nguyên tử X có 19 proton, 20 neutron, 19 electron và điện tích hạt nhân là +19." },
-                    { key: "E", text: "Tỉ số giữa số hạt không mang điện và số hạt mang điện trong nguyên tử X là 20/38 = 10/19." },
-                    { key: "F", text: "Nguyên tử X có tổng số hạt trong hạt nhân là 39, trong đó số proton bằng số neutron." },
-                    { key: "G", text: "Cả D và E đều đúng." }
-                ],
-                correct: "G"
-            },
-            {
-                id: 2, type: "mcq",
-                question: "Cho các phát biểu sau về cấu tạo nguyên tử và mô hình nguyên tử:<br>1. Trong nguyên tử, khối lượng tập trung chủ yếu ở hạt nhân vì khối lượng của electron rất nhỏ so với proton và neutron.<br>2. Vỏ nguyên tử Rutherford - Bohr gồm các electron chuyển động xung quanh hạt nhân theo những quỹ đạo xác định giống như các hành tinh quay quanh Mặt Trời.<br>3. Nguyên tử luôn trung hòa về điện, do đó số proton bằng số neutron.<br>4. Lớp electron trong cùng (lớp thứ nhất, gần hạt nhân nhất) chứa tối đa 8 electron.<br>5. Đường kính của hạt nhân nguyên tử nhỏ hơn đường kính nguyên tử khoảng 10.000 đến 100.000 lần.<br>6. Điện tích của một proton có giá trị bằng điện tích của một electron về độ lớn nhưng trái dấu.<br><br><b>Số phát biểu ĐÚNG là:</b>",
-                options: [
-                    { key: "A", text: "2" }, { key: "B", text: "3" }, { key: "C", text: "4" },
-                    { key: "D", text: "5" }, { key: "E", text: "6" }, { key: "F", text: "1" }, { key: "G", text: "0" }
-                ],
-                correct: "C"
-            },
-            {
-                id: 3, type: "mcq",
-                question: "Nguyên tử Y có tổng số hạt cơ bản là 36. Trong hạt nhân nguyên tử Y, số hạt mang điện bằng số hạt không mang điện. Một nguyên tử Z khác có số proton nhiều hơn Y là 3 hạt và số neutron nhiều hơn Y là 4 hạt. Cho các nhận định sau:<br>(1) Nguyên tử Y có 12 proton, 12 neutron và 12 electron.<br>(2) Nguyên tử Z có điện tích hạt nhân là +15.<br>(3) Khối lượng nguyên tử Z ước tính xấp xỉ 31 amu.<br>(4) Số hạt mang điện của nguyên tử Z nhiều hơn số hạt mang điện của nguyên tử Y là 6 hạt.<br><br><b>Có bao nhiêu nhận định ĐÚNG trong các nhận định trên?</b>",
-                options: [
-                    { key: "A", text: "Tất cả 4 nhận định đều đúng." },
-                    { key: "B", text: "Chỉ có 1 nhận định đúng." },
-                    { key: "C", text: "Chỉ có 2 nhận định đúng." },
-                    { key: "D", text: "Chỉ có 3 nhận định đúng." },
-                    { key: "E", text: "Không có nhận định nào đúng." },
-                    { key: "F", text: "Có 2 nhận định sai là (1) và (3)." },
-                    { key: "G", text: "Có 1 nhận định sai là (2)." }
+                    { key: "A", text: "Kĩ năng quan sát." },
+                    { key: "B", text: "Kĩ năng dự báo." },
+                    { key: "C", text: "Kĩ năng lập kế hoạch." },
+                    { key: "D", text: "Kĩ năng rút ra kết luận." }
                 ],
                 correct: "A"
             },
             {
-                id: 4, type: "mcq",
-                question: "Tổng số hạt p, n, e trong hai nguyên tử A và B là 142 hạt, trong đó tổng số hạt mang điện nhiều hơn tổng số hạt không mang điện là 42 hạt. Số hạt mang điện của nguyên tử B nhiều hơn số hạt mang điện của nguyên tử A là 12 hạt. Điện tích hạt nhân của nguyên tử A và B lần lượt là:",
+                id: 2, type: "mcq",
+                question: "Câu 2: Khi đo thể tích chất lỏng bằng ống đong, cách đặt mắt nào sau đây là đúng để đọc kết quả chính xác?",
                 options: [
-                    { key: "A", text: "+17 và +23" }, { key: "B", text: "+20 và +26" },
-                    { key: "C", text: "+12 và +18" }, { key: "D", text: "+15 và +21" },
-                    { key: "E", text: "+18 và +24" }, { key: "F", text: "+19 và +25" },
-                    { key: "G", text: "+16 và +22" }
+                    { key: "A", text: "Đặt mắt nhìn từ trên xuống dưới vuông góc với mặt chất lỏng." },
+                    { key: "B", text: "Đặt mắt nhìn ngang với mực chất lỏng trong ống đong." },
+                    { key: "C", text: "Đặt mắt nhìn từ dưới lên trên lệch so với ống đong." },
+                    { key: "D", text: "Đặt mắt ở bất kì vị trí nào miễn là nhìn thấy vạch chia." }
                 ],
-                correct: "F"
+                correct: "B"
             },
             {
-                id: 5, type: "mcq",
-                question: "Tổng số hạt cơ bản trong 3 nguyên tử M, N, P là 82 hạt. Trong đó, số hạt mang điện nhiều hơn số hạt không mang điện là 22 hạt. Tổng số hạt trong nguyên tử N nhiều hơn trong nguyên tử M là 6 hạt. Số hạt không mang điện của P bằng trung bình cộng số hạt không mang điện của M và N. Biết nguyên tử M có số p = n. Kết luận nào sau đây <b>SAI</b>?",
+                id: 3, type: "mcq",
+                question: "Câu 3: Hạt nhân của hầu hết các nguyên tử được cấu tạo từ các loại hạt cơ bản nào?",
                 options: [
-                    { key: "A", text: "Nguyên tử M có số proton là 8." },
-                    { key: "B", text: "Nguyên tử N có số proton là 10." },
-                    { key: "C", text: "Nguyên tử P có 8 proton và 10 neutron." },
-                    { key: "D", text: "Điện tích hạt nhân của nguyên tử N là +10." },
-                    { key: "E", text: "Khối lượng nguyên tử M là 16 amu." },
-                    { key: "F", text: "Tổng số electron của cả 3 nguyên tử M, N, P bằng 26." },
-                    { key: "G", text: "Số neutron của nguyên tử P bằng 9." }
+                    { key: "A", text: "Proton và Electron." },
+                    { key: "B", text: "Electron và Neutron." },
+                    { key: "C", text: "Proton và Neutron." },
+                    { key: "D", text: "Chỉ gồm các hạt Electron." }
                 ],
                 correct: "C"
             },
             {
-                id: 6, type: "short",
-                question: "Tổng số hạt cơ bản (p, n, e) trong hai nguyên tử của nguyên tố X và Y là 90. Số hạt mang điện của nguyên tử Y nhiều hơn số hạt mang điện của nguyên tử X là 12 hạt. Trong nguyên tử X, số hạt không mang điện bằng số hạt mang điện âm. Trong nguyên tử Y, số hạt mang điện nhiều hơn số hạt không mang điện là 8 hạt. Tính tổng khối lượng ước tính (theo đơn vị amu) của 1 nguyên tử X và 1 nguyên tử Y.<br><i class='text-xs text-indigo-600 font-normal'>(Gợi ý nhập kết quả: Điền một số nguyên)</i>",
-                correct: "60"
+                id: 4, type: "mcq",
+                question: "Câu 4: Nguyên tử X có số hiệu nguyên tử Z = 11. Số hạt electron có trong nguyên tử X là:",
+                options: [
+                    { key: "A", text: "11" },
+                    { key: "B", text: "12" },
+                    { key: "C", text: "22" },
+                    { key: "D", text: "23" }
+                ],
+                correct: "A"
             },
             {
-                id: 7, type: "short",
-                question: "Một nguyên tử M có tổng số hạt cơ bản là 49. Biết rằng số hạt mang điện nhiều hơn số hạt không mang điện là 15 hạt. Nguyên tử M này nhường đi 2 electron để trở thành một hạt mang điện dương (gọi là ion M2+). Hỏi trong hạt ion M2+ đó, tổng số hạt mang điện là bao nhiêu?<br><i class='text-xs text-indigo-600 font-normal'>(Gợi ý nhập kết quả: Điền một số nguyên)</i>",
-                correct: "30"
+                id: 5, type: "mcq",
+                question: "Câu 5: Tổng số hạt cơ bản (p, n, e) trong một nguyên tử A là 34 hạt, trong đó số hạt mang điện nhiều hơn số hạt không mang điện là 10 hạt. Số proton của nguyên tử A là:",
+                options: [
+                    { key: "A", text: "10" },
+                    { key: "B", text: "11" },
+                    { key: "C", text: "12" },
+                    { key: "D", text: "13" }
+                ],
+                correct: "B"
             },
             {
-                id: 8, type: "short",
-                question: "Trung bình cứ 10.000 nguyên tử của nguyên tố A thì có đường kính hạt nhân xấp xỉ 2 x 10^-15 m. Biết đường kính của toàn bộ nguyên tử A lớn gấp 20.000 lần đường kính hạt nhân của nó. Hỏi đường kính của một nguyên tử A bằng bao nhiêu picomét (pm)? Biết 1 pm = 10^-12 m.<br><i class='text-xs text-indigo-600 font-normal'>(Gợi ý nhập kết quả: Điền một số nguyên)</i>",
-                correct: "40"
+                id: 6, type: "mcq",
+                question: "Câu 6: Tập hợp tất cả các nguyên tử có cùng số proton trong hạt nhân được gọi là:",
+                options: [
+                    { key: "A", text: "Phân tử." },
+                    { key: "B", text: "Đơn chất." },
+                    { key: "C", text: "Nguyên tố hóa học." },
+                    { key: "D", text: "Hợp chất." }
+                ],
+                correct: "C"
             },
             {
-                id: 9, type: "short",
-                question: "Cho hợp chất ZX2 có tổng số hạt cơ bản (p, n, e) cấu tạo nên phân tử là 96 hạt. Trong đó, tổng số hạt mang điện nhiều hơn số hạt không mang điện là 32 hạt. Số hạt mang điện của nguyên tử Z ít hơn số hạt mang điện của một nguyên tử X là 8 hạt. Hãy xác định tổng số hạt neutron (n) có trong toàn bộ phân tử ZX2.<br><i class='text-xs text-indigo-600 font-normal'>(Gợi ý nhập kết quả: Điền một số nguyên)</i>",
-                correct: "32"
+                id: 7, type: "mcq",
+                question: "Câu 7: Kí hiệu hóa học của hai nguyên tố Natri (Sodium) và Canxi (Calcium) lần lượt là:",
+                options: [
+                    { key: "A", text: "Na và Ca" },
+                    { key: "B", text: "K và Cu" },
+                    { key: "C", text: "Mg và Cl" },
+                    { key: "D", text: "N và C" }
+                ],
+                correct: "A"
+            },
+            {
+                id: 8, type: "mcq",
+                question: "Câu 8: Các nguyên tố hóa học trong Bảng tuần hoàn hiện nay được sắp xếp theo chiều tăng dần của:",
+                options: [
+                    { key: "A", text: "Khối lượng nguyên tử." },
+                    { key: "B", text: "Số hạt neutron trong hạt nhân." },
+                    { key: "C", text: "Điện tích hạt nhân (số proton)." },
+                    { key: "D", text: "Số lớp electron ở vỏ nguyên tử." }
+                ],
+                correct: "C"
+            },
+            {
+                id: 9, type: "mcq",
+                question: "Câu 9: Nguyên tố X nằm ở ô số 8, chu kì 2, nhóm VIA trong Bảng tuần hoàn. Phát biểu nào sau đây về nguyên tử X là đúng?",
+                options: [
+                    { key: "A", text: "Nguyên tử X có 8 lớp electron." },
+                    { key: "B", text: "Nguyên tử X có 6 electron ở lớp ngoài cùng." },
+                    { key: "C", text: "Nguyên tố X là một kim loại điển hình." },
+                    { key: "D", text: "Hạt nhân nguyên tử X có 16 proton." }
+                ],
+                correct: "B"
+            },
+            {
+                id: 10, type: "mcq",
+                question: "Câu 10: Nguyên tử nguyên tố M có 12 proton, nguyên tử nguyên tố X có 17 proton. Khi M và X kết hợp với nhau tạo thành hợp chất, công thức hóa học của hợp chất tạo thành là:",
+                options: [
+                    { key: "A", text: "MX" },
+                    { key: "B", text: "M2X" },
+                    { key: "C", text: "MX2" },
+                    { key: "D", text: "M2X3" }
+                ],
+                correct: "C"
+            },
+            {
+                id: 11, type: "mcq",
+                question: "Câu 11: Chất nào sau đây được phân loại là đơn chất?",
+                options: [
+                    { key: "A", text: "Khí oxygen (O2)" },
+                    { key: "B", text: "Nước (H2O)" },
+                    { key: "C", text: "Muối ăn (NaCl)" },
+                    { key: "D", text: "Khí carbon dioxide (CO2)" }
+                ],
+                correct: "A"
+            },
+            {
+                id: 12, type: "mcq",
+                question: "Câu 12: Hợp chất X có dạng R2O3, trong đó Oxygen chiếm một tỉ lệ khối lượng nhất định. Biết khối lượng phân tử của X bằng 102 amu (với nguyên tử khối của O = 16 amu). Nguyên tố R là:",
+                options: [
+                    { key: "A", text: "Sắt (Fe)" },
+                    { key: "B", text: "Nhôm (Al)" },
+                    { key: "C", text: "Photpho (P)" },
+                    { key: "D", text: "Magie (Mg)" }
+                ],
+                correct: "B"
+            },
+            {
+                id: 13, type: "mcq",
+                question: "Câu 13: Phân tử hợp chất AX2 có tổng số hạt cơ bản (p, n, e) là 96 hạt, trong đó tổng số hạt mang điện nhiều hơn tổng số hạt không mang điện là 32 hạt. Số hạt mang điện của nguyên tử X nhiều hơn của nguyên tử A là 8 hạt. Khối lượng phân tử của AX2 xấp xỉ bằng:",
+                options: [
+                    { key: "A", text: "44 amu" },
+                    { key: "B", text: "64 amu" },
+                    { key: "C", text: "76 amu" },
+                    { key: "D", text: "80 amu" }
+                ],
+                correct: "D"
+            },
+            {
+                id: 14, type: "mcq",
+                question: "Câu 14: Liên kết hóa học được hình thành bằng việc dùng chung một hay nhiều cặp electron giữa hai nguyên tử (thường là các nguyên tử phi kim) được gọi là:",
+                options: [
+                    { key: "A", text: "Liên kết ion." },
+                    { key: "B", text: "Liên kết cộng hóa trị." },
+                    { key: "C", text: "Liên kết kim loại." },
+                    { key: "D", text: "Lực hút tĩnh điện." }
+                ],
+                correct: "B"
+            },
+            {
+                id: 15, type: "mcq",
+                question: "Câu 15: Chất nào sau đây trong phân tử tồn tại chủ yếu nhờ liên kết ion?",
+                options: [
+                    { key: "A", text: "H2O" },
+                    { key: "B", text: "CO2" },
+                    { key: "C", text: "NaCl" },
+                    { key: "D", text: "CH4" }
+                ],
+                correct: "C"
+            },
+            {
+                id: 16, type: "mcq",
+                question: "Câu 16: Ion X2+ được tạo thành khi nguyên tử X nhường đi 2 electron. Biết tổng số hạt cơ bản trong ion X2+ là 46 hạt, trong đó số hạt mang điện nhiều hơn số hạt không mang điện là 14 hạt. Số hiệu nguyên tử của nguyên tố X là:",
+                options: [
+                    { key: "A", text: "12" },
+                    { key: "B", text: "14" },
+                    { key: "C", text: "16" },
+                    { key: "D", text: "20" }
+                ],
+                correct: "D"
+            },
+            {
+                id: 17, type: "tf_group",
+                question: "Câu 17: Cấu tạo nguyên tử & Nguyên tố hóa học:",
+                items: [
+                    { id: "17a", text: "a) Hầu hết khối lượng của nguyên tử tập trung ở hạt nhân vì khối lượng của electron rất nhỏ so với proton và neutron.", correct: "Đ" },
+                    { id: "17b", text: "b) Tất cả các nguyên tử tồn tại trong tự nhiên đều được cấu tạo từ đầy đủ ba loại hạt: proton, neutron và electron.", correct: "S" },
+                    { id: "17c", text: "c) Số proton trong hạt nhân nguyên tử luôn bằng số electron ở vỏ nguyên tử trong trạng thái nguyên tử trung hòa về điện.", correct: "Đ" },
+                    { id: "17d", text: "d) Các nguyên tử của cùng một nguyên tố hóa học bắt buộc phải có số neutron hoàn toàn giống nhau.", correct: "S" }
+                ]
+            },
+            {
+                id: 18, type: "tf_group",
+                question: "Câu 18: Bảng tuần hoàn các nguyên tố hóa học:",
+                items: [
+                    { id: "18a", text: "a) Số thứ tự ô nguyên tố trong Bảng tuần hoàn bằng số proton và bằng số hiệu nguyên tử của nguyên tố đó.", correct: "Đ" },
+                    { id: "18b", text: "b) Các nguyên tố trong cùng một chu kì có số electron ở lớp ngoài cùng bằng nhau.", correct: "S" },
+                    { id: "18c", text: "c) Nhóm A trong Bảng tuần hoàn chỉ bao gồm các nguyên tố phi kim và khí hiếm.", correct: "S" },
+                    { id: "18d", text: "d) Nguyên tử của các nguyên tố khí hiếm có lớp electron ngoài cùng rất bền vững (thường có 8 electron, riêng Helium có 2 electron).", correct: "Đ" }
+                ]
+            },
+            {
+                id: 19, type: "tf_group",
+                question: "Câu 19: Phân tử & Liên kết hóa học:",
+                items: [
+                    { id: "19a", text: "a) Phân tử nước (H2O) là một hợp chất được tạo nên từ hai nguyên tố hóa học là Hydrogen và Oxygen.", correct: "Đ" },
+                    { id: "19b", text: "b) Liên kết ion được hình thành nhờ lực hút tĩnh điện giữa các ion mang điện tích trái dấu (ion dương và ion âm).", correct: "Đ" },
+                    { id: "19c", text: "c) Trong phân tử khí carbon dioxide (CO2), liên kết giữa nguyên tử Carbon và Oxygen là liên kết ion.", correct: "S" },
+                    { id: "19d", text: "d) Các hợp chất ion thường ở trạng thái rắn ở điều kiện thường và có nhiệt độ nóng chảy, nhiệt độ sôi khá cao.", correct: "Đ" }
+                ]
+            },
+            {
+                id: 20, type: "short",
+                question: "Câu 20: Khí Methane (CH4) là thành phần chính của khí thiên nhiên. Biết nguyên tử khối của C = 12 amu và H = 1 amu. Hãy tính khối lượng phân tử của khí Methane theo đơn vị amu.<br><i class='text-xs text-indigo-600 font-normal'>(Điền một số nguyên)</i>",
+                correct: "16"
+            },
+            {
+                id: 21, type: "short",
+                question: "Câu 21: Một nguyên tử M có tổng số hạt cơ bản (p, n, e) bằng 49 hạt, trong đó số hạt mang điện nhiều hơn số hạt không mang điện là 15 hạt. Tính số hạt neutron (n) của nguyên tử M.<br><i class='text-xs text-indigo-600 font-normal'>(Điền một số nguyên)</i>",
+                correct: "17"
+            },
+            {
+                id: 22, type: "short",
+                question: "Câu 22: Hợp chất Z được cấu tạo từ 2 nguyên tử kim loại M và 1 nguyên tử Oxygen (M2O). Tổng số hạt mang điện trong một phân tử Z là 60 hạt (biết nguyên tử Oxygen có 8 proton). Tính số proton trong hạt nhân của nguyên tử kim loại M.<br><i class='text-xs text-indigo-600 font-normal'>(Điền một số nguyên)</i>",
+                correct: "11"
+            },
+            {
+                id: 23, type: "short",
+                question: "Câu 23: Cho hợp chất cộng hóa trị X có công thức dạng Y2O5. Biết khối lượng phân tử của X bằng 142 amu (với O = 16 amu). Tính tổng số hạt electron ở vỏ của tất cả các nguyên tử có trong một phân tử X.<br><i class='text-xs text-indigo-600 font-normal'>(Điền một số nguyên)</i>",
+                correct: "70"
             }
         ];
 
-        // BỘ CÂU HỎI 2: NGUYÊN TỐ HÓA HỌC (Hạn 23H Ngày 24/10/2026)
+        // CÁC BỘ CÂU HỎI KHÁC
+        const quizBonding = [
+            {
+                id: 1, type: "mcq",
+                question: "Câu 1: Phân tử là hạt đại diện cho chất, gồm một số nguyên tử liên kết với nhau và:",
+                options: [
+                    { key: "A", text: "Mang tính chất hóa học của chất." },
+                    { key: "B", text: "Không mang tính chất hóa học của chất." },
+                    { key: "C", text: "Luôn chứa các nguyên tử cùng loại." },
+                    { key: "D", text: "Luôn chứa các nguyên tử khác loại." }
+                ],
+                correct: "A"
+            },
+            {
+                id: 2, type: "mcq",
+                question: "Câu 2: Khối lượng phân tử được tính bằng:",
+                options: [
+                    { key: "A", text: "Khối lượng của nguyên tử có khối lượng lớn nhất trong phân tử." },
+                    { key: "B", text: "Tổng khối lượng của các nguyên tử có trong phân tử (theo đơn vị amu)." },
+                    { key: "C", text: "Trung bình cộng khối lượng các nguyên tử trong phân tử." },
+                    { key: "D", text: "Tích khối lượng của các nguyên tử trong phân tử." }
+                ],
+                correct: "B"
+            },
+            {
+                id: 3, type: "mcq",
+                question: "Câu 3: Liên kết cộng hóa trị là liên kết được hình thành giữa các nguyên tử bằng cách:",
+                options: [
+                    { key: "A", text: "Cho và nhận electron." },
+                    { key: "B", text: "Dùng chung một hay nhiều cặp electron." },
+                    { key: "C", text: "Hút nhau bằng lực hút tĩnh điện giữa các ion." },
+                    { key: "D", text: "Dùng chung các hạt proton trong hạt nhân." }
+                ],
+                correct: "B"
+            },
+            {
+                id: 4, type: "mcq",
+                question: "Câu 4: Khi các nguyên tử nhường hoặc nhận electron, chúng sẽ trở thành các hạt mang điện gọi là:",
+                options: [
+                    { key: "A", text: "Phân tử." },
+                    { key: "B", text: "Đồng vị." },
+                    { key: "C", text: "Ion." },
+                    { key: "D", text: "Hạt nhân." }
+                ],
+                correct: "C"
+            },
+            {
+                id: 5, type: "mcq",
+                question: "Câu 5: Khí nitrogen (N2) là thành phần chính trong không khí. Biết nguyên tử N có khối lượng nguyên tử bằng 14 amu. Khối lượng phân tử của khí nitrogen là:",
+                options: [
+                    { key: "A", text: "14 amu" },
+                    { key: "B", text: "28 amu" },
+                    { key: "C", text: "42 amu" },
+                    { key: "D", text: "7 amu" }
+                ],
+                correct: "B"
+            },
+            {
+                id: 6, type: "mcq",
+                question: "Câu 6: Phát biểu nào sau đây đúng khi nói về sự hình thành liên kết ion trong phân tử Sodium chloride (NaCl)?",
+                options: [
+                    { key: "A", text: "Nguyên tử Na nhận 1 e trở thành ion âm, nguyên tử Cl nhường 1 e trở thành ion dương." },
+                    { key: "B", text: "Nguyên tử Na nhường 1 e trở thành ion dương (Na+), nguyên tử Cl nhận 1 e trở thành ion âm (Cl-)." },
+                    { key: "C", text: "Hai nguyên tử Na và Cl dùng chung 1 cặp electron." },
+                    { key: "D", text: "Hai nguyên tử Na và Cl dùng chung 2 cặp electron." }
+                ],
+                correct: "B"
+            },
+            {
+                id: 7, type: "mcq",
+                question: "Câu 7: Chất nào sau đây được cấu tạo bởi liên kết cộng hóa trị?",
+                options: [
+                    { key: "A", text: "Magnesium oxide (MgO)" },
+                    { key: "B", text: "Potassium chloride (KCl)" },
+                    { key: "C", text: "Nước (H2O)" },
+                    { key: "D", text: "Calcium oxide (CaO)" }
+                ],
+                correct: "C"
+            },
+            {
+                id: 8, type: "mcq",
+                question: "Câu 8: Một phân tử hợp chất X chứa 1 nguyên tử nguyên tố R và 2 nguyên tử Oxygen. Biết khối lượng phân tử của X nặng gấp 22 lần phân tử Hydrogen (H2, 2 amu). Nguyên tố R là:",
+                options: [
+                    { key: "A", text: "Carbon (C)" },
+                    { key: "B", text: "Sulfur (S)" },
+                    { key: "C", text: "Nitrogen (N)" },
+                    { key: "D", text: "Silicon (Si)" }
+                ],
+                correct: "A"
+            },
+            {
+                id: 9, type: "mcq",
+                question: "Câu 9: Cho các chất sau: O2, KCl, CO2, CaCl2, H2O, NH3. Số chất mà phân tử chứa liên kết cộng hóa trị là:",
+                options: [
+                    { key: "A", text: "2" },
+                    { key: "B", text: "3" },
+                    { key: "C", text: "4" },
+                    { key: "D", text: "5" }
+                ],
+                correct: "C"
+            },
+            {
+                id: 10, type: "mcq",
+                question: "Câu 10: Tinh thể chất A có các đặc điểm: nhiệt độ nóng chảy rất cao, cứng, dung dịch của nó trong nước dẫn được điện. Trong khi đó, chất B ở điều kiện thường là chất khí, nhiệt độ sôi thấp. Phát biểu nào sau đây phản ánh đúng bản chất liên kết trong A và B?",
+                options: [
+                    { key: "A", text: "A chứa liên kết cộng hóa trị, B chứa liên kết ion." },
+                    { key: "B", text: "A chứa liên kết ion, B chứa liên kết cộng hóa trị." },
+                    { key: "C", text: "Cả A và B đều chứa liên kết ion." },
+                    { key: "D", text: "Cả A và B đều chứa liên kết cộng hóa trị." }
+                ],
+                correct: "B"
+            },
+            {
+                id: 11, type: "tf_group",
+                question: "Câu 11: Cho các phát biểu về sự hình thành liên kết hóa học giữa các nguyên tử để đạt cấu hình electron bền vững của khí hiếm:",
+                items: [
+                    { id: "11a", text: "a) Các nguyên tử phi kim thường có xu hướng nhường electron để trở thành ion dương.", correct: "S" },
+                    { id: "11b", text: "b) Nguyên tử Sodium (Na, Z=11) có 1 e ở lớp ngoài cùng, có xu hướng nhường 1 e này để đạt lớp vỏ bền vững giống khí hiếm Neon.", correct: "Đ" },
+                    { id: "11c", text: "c) Trong phân tử nước (H2O), mỗi nguyên tử Hydrogen góp chung 1 e với nguyên tử Oxygen để tạo thành các cặp electron dùng chung.", correct: "Đ" },
+                    { id: "11d", text: "d) Liên kết cộng hóa trị thường được hình thành giữa các nguyên tử kim loại điển hình và phi kim điển hình.", correct: "S" }
+                ]
+            },
+            {
+                id: 12, type: "tf_group",
+                question: "Câu 12: Cho phân tử Carbon dioxide (CO2) – thành phần khí được xả ra trong quá trình hô hấp và đốt cháy nhiên liệu:",
+                items: [
+                    { id: "12a", text: "a) Phân tử CO2 gồm 1 nguyên tử Carbon và 2 nguyên tử Oxygen.", correct: "Đ" },
+                    { id: "12b", text: "b) Khối lượng phân tử của CO2 là 44 amu (biết C = 12 amu, O = 16 amu).", correct: "Đ" },
+                    { id: "12c", text: "c) Liên kết giữa nguyên tử Carbon và hai nguyên tử Oxygen trong phân tử CO2 là liên kết ion do lực hút giữa các ion trái dấu.", correct: "S" },
+                    { id: "12d", text: "d) Nguyên tử Carbon đã góp chung 4 electron (mỗi nguyên tử Oxygen góp 2 electron) để tạo thành 2 cặp electron dùng chung với mỗi nguyên tử Oxygen.", correct: "Đ" }
+                ]
+            },
+            {
+                id: 13, type: "short",
+                question: "Câu 13: Hợp chất A có công thức dạng X2O3, được ứng dụng nhiều trong ngành luyện kim. Biết khối lượng phân tử của A bằng 160 amu và khối lượng nguyên tử của Oxygen là 16 amu. Hãy tính khối lượng nguyên tử (theo đơn vị amu) của nguyên tố X.<br><i class='text-xs text-indigo-600 font-normal'>(Chỉ ghi kết quả là một số nguyên)</i>",
+                correct: "56"
+            },
+            {
+                id: 14, type: "short",
+                question: "Câu 14: Cho một phân tử hợp chất Y có công thức dạng MH4. Tổng số hạt cơ bản (p, n, e) tạo nên phân tử Y là 24 hạt. Biết trong hợp chất Y, khối lượng của nguyên tố M chiếm 75% khối lượng phân tử. Tính tổng số hạt không mang điện (n) có trong 1 phân tử Y.<br><i class='text-xs text-indigo-600 font-normal'>(Chỉ ghi kết quả là một số nguyên)</i>",
+                correct: "6"
+            },
+            {
+                id: 15, type: "short",
+                question: "Câu 15: Hợp chất Z được cấu tạo từ 2 nguyên tử của nguyên tố kim loại A và 1 nguyên tử Oxygen (A2O). Tổng số hạt mang điện trong một phân tử Z là 60 hạt. Xác định số hiệu nguyên tử (số proton) của nguyên tố kim loại A.<br><i class='text-xs text-indigo-600 font-normal'>(Chỉ ghi kết quả là một số nguyên)</i>",
+                correct: "19"
+            }
+        ];
+
         const quizElement = [
             {
                 id: 1, type: "mcq",
-                question: "Hai nguyên tử A và B cùng thuộc về một nguyên tố hóa học. Phát biểu nào sau đây về A và B là đúng nhất và chính xác nhất?",
+                question: "Câu 1: Hai nguyên tử A và B cùng thuộc về một nguyên tố hóa học. Phát biểu nào sau đây về A và B là đúng nhất và chính xác nhất?",
                 options: [
                     { key: "A", text: "A và B bắt buộc phải có cùng số proton, cùng số electron và cùng số neutron." },
                     { key: "B", text: "A và B có cùng số proton trong hạt nhân, nhưng có thể khác nhau về số neutron nên khối lượng nguyên tử có thể khác nhau." },
@@ -284,7 +802,7 @@
             },
             {
                 id: 2, type: "mcq",
-                question: "Cho các phát biểu sau về nguyên tố hóa học, kí hiệu hóa học và khối lượng nguyên tử:<br>1. Tập hợp các nguyên tử có cùng số proton trong hạt nhân đều thuộc cùng một nguyên tố hóa học.<br>2. Kí hiệu hóa học của nguyên tố được biểu diễn bằng một hoặc hai chữ cái, trong đó chữ cái đầu tiên viết hoa, chữ cái thứ hai (nếu có) viết thường.<br>3. Nguyên tố Oxygen là nguyên tố dồi dào nhất trong vỏ Trái Đất và cũng chiếm phần lớn khối lượng cơ thể người.<br>4. Khối lượng nguyên tử tính theo đơn vị amu (1 amu xấp xỉ 1,66 x 10^-24 g) xấp xỉ bằng tổng số proton và số electron.<br>5. Kí hiệu hóa học của Calcium là Ca, Potassium là K, Sodium là Na, Phosphorus là P.<br>6. Các nguyên tử thuộc cùng một nguyên tố hóa học đều có cùng số lớp electron ở vỏ nguyên tử.<br>7. Tên gọi của một số nguyên tố hóa học được đặt theo tên các nhà khoa học hoặc tên quốc gia/địa danh.<br><br><b>Số phát biểu ĐÚNG trong 7 phát biểu trên là:</b>",
+                question: "Câu 2: Cho các phát biểu sau về nguyên tố hóa học, kí hiệu hóa học và khối lượng nguyên tử:<br>1. Tập hợp các nguyên tử có cùng số proton trong hạt nhân đều thuộc cùng một nguyên tố hóa học.<br>2. Kí hiệu hóa học của nguyên tố được biểu diễn bằng một hoặc hai chữ cái, trong đó chữ cái đầu tiên viết hoa, chữ cái thứ hai (nếu có) viết thường.<br>3. Nguyên tố Oxygen là nguyên tố dồi dào nhất trong vỏ Trái Đất và cũng chiếm phần lớn khối lượng cơ thể người.<br>4. Khối lượng nguyên tử tính theo đơn vị amu (1 amu xấp xỉ 1,66 x 10^-24 g) xấp xỉ bằng tổng số proton và số electron.<br>5. Kí hiệu hóa học của Calcium là Ca, Potassium là K, Sodium là Na, Phosphorus là P.<br>6. Các nguyên tử thuộc cùng một nguyên tố hóa học đều có cùng số lớp electron ở vỏ nguyên tử.<br>7. Tên gọi của một số nguyên tố hóa học được đặt theo tên các nhà khoa học hoặc tên quốc gia/địa danh.<br><br><b>Số phát biểu ĐÚNG trong 7 phát biểu trên là:</b>",
                 options: [
                     { key: "A", text: "2" }, { key: "B", text: "3" }, { key: "C", text: "4" },
                     { key: "D", text: "5" }, { key: "E", text: "6" }, { key: "F", text: "7" },
@@ -301,7 +819,7 @@
             },
             {
                 id: 3, type: "mcq",
-                question: "Tổng số hạt p, n, e của nguyên tử nguyên tố X là 52. Biết rằng số hạt không mang điện nhiều hơn số hạt mang điện âm là 2 hạt. Hãy xác định tên nguyên tố X và khối lượng nguyên tử ước tính của X.",
+                question: "Câu 3: Tổng số hạt p, n, e của nguyên tử nguyên tố X là 52. Biết rằng số hạt không mang điện nhiều hơn số hạt mang điện âm là 2 hạt. Hãy xác định tên nguyên tố X và khối lượng nguyên tử ước tính của X.",
                 options: [
                     { key: "A", text: "Magnesium (Mg), 24 amu" }, { key: "B", text: "Aluminium (Al), 27 amu" },
                     { key: "C", text: "Chlorine (Cl), 35,5 amu" }, { key: "D", text: "Potassium (K), 39 amu" },
@@ -316,7 +834,7 @@
             },
             {
                 id: 4, type: "mcq",
-                question: "Cho ba nguyên tử X, Y, Z thuộc ba nguyên tố hóa học khác nhau. Tổng số proton của cả 3 nguyên tử là 31. Điện tích hạt nhân của Y gấp đôi điện tích hạt nhân của X. Số proton của Z nhiều hơn số proton của X là 3 hạt. Kết luận nào sau đây SAI?",
+                question: "Câu 4: Cho ba nguyên tử X, Y, Z thuộc ba nguyên tố hóa học khác nhau. Tổng số proton của cả 3 nguyên tử là 31. Điện tích hạt nhân của Y gấp đôi điện tích hạt nhân của X. Số proton của Z nhiều hơn số proton của X là 3 hạt. Kết luận nào sau đây SAI?",
                 options: [
                     { key: "A", text: "Nguyên tố X có điện tích hạt nhân là +7 (Nitrogen)." },
                     { key: "B", text: "Nguyên tố Y có 14 proton, thuộc nguyên tố Silicon (Si)." },
@@ -338,7 +856,7 @@
             },
             {
                 id: 5, type: "mcq",
-                question: "Hợp chất A được tạo bởi hai nguyên tố X và Y có công thức XY3. Tổng số hạt p, n, e trong một phân tử XY3 là 120 hạt. Trong đó, tổng số hạt mang điện nhiều hơn số hạt không mang điện là 40 hạt. Số hạt mang điện trong nguyên tử X ít hơn số hạt mang điện trong một nguyên tử Y là 2 hạt. Khối lượng phân tử của XY3 ước tính xấp xỉ bao nhiêu amu?",
+                question: "Câu 5: Hợp chất A được tạo bởi hai nguyên tố X và Y có công thức XY3. Tổng số hạt p, n, e trong một phân tử XY3 là 120 hạt. Trong đó, tổng số hạt mang điện nhiều hơn số hạt không mang điện là 40 hạt. Số hạt mang điện trong nguyên tử X ít hơn số hạt mang điện trong một nguyên tử Y là 2 hạt. Khối lượng phân tử của XY3 ước tính xấp xỉ bao nhiêu amu?",
                 options: [
                     { key: "A", text: "80 amu" }, { key: "B", text: "62 amu" }, { key: "C", text: "46 amu" },
                     { key: "D", text: "80 amu (SO3)" }, { key: "E", text: "78 amu" }, { key: "F", text: "85 amu" },
@@ -352,7 +870,7 @@
             },
             {
                 id: 6, type: "mcq",
-                question: "Khi nghiên cứu về 4 nguyên tử M, N, P, Q, người ta thu được các số liệu về thành phần hạt như sau:<br>- Nguyên tử M: 6 proton, 6 neutron, 6 electron<br>- Nguyên tử N: 7 proton, 7 neutron, 7 electron<br>- Nguyên tử P: 6 proton, 8 neutron, 6 electron<br>- Nguyên tử Q: 8 proton, 8 neutron, 8 electron<br><br><b>Trong 4 nguyên tử trên, có bao nhiêu nguyên tố hóa học khác nhau được biểu diễn?</b>",
+                question: "Câu 6: Khi nghiên cứu về 4 nguyên tử M, N, P, Q, người ta thu được các số liệu về thành phần hạt như sau:<br>- Nguyên tử M: 6 proton, 6 neutron, 6 electron<br>- Nguyên tử N: 7 proton, 7 neutron, 7 electron<br>- Nguyên tử P: 6 proton, 8 neutron, 6 electron<br>- Nguyên tử Q: 8 proton, 8 neutron, 8 electron<br><br><b>Trong 4 nguyên tử trên, có bao nhiêu nguyên tố hóa học khác nhau được biểu diễn?</b>",
                 options: [
                     { key: "A", text: "1 nguyên tố" }, { key: "B", text: "2 nguyên tố" }, { key: "C", text: "3 nguyên tố" },
                     { key: "D", text: "4 nguyên tố" }, { key: "E", text: "5 nguyên tố" },
@@ -379,8 +897,14 @@
         let timerInterval = null;
         let roundedScore = "0.00";
         let correctCount = 0;
+        let totalQuestionItems = 0;
         let durationFormatted = "00:00";
         let submissionTimeStamp = "";
+
+        // Chạy khi tải trang
+        window.onload = function() {
+            initScenarioSelector();
+        };
 
         // Khởi chạy bài tập
         function startQuiz() {
@@ -390,9 +914,12 @@
             studentName = nameInput.value.trim();
             const selectedQuizVal = document.querySelector('input[name="quiz_select"]:checked').value;
 
-            if (selectedQuizVal === "quiz_atom") {
-                currentQuizData = quizAtom;
-                currentQuizTitle = "Bài tập nguyên tử";
+            if (selectedQuizVal === "quiz_midterm") {
+                currentQuizData = quizMidterm;
+                currentQuizTitle = "Đề 1 Ôn tập giữa kì 1";
+            } else if (selectedQuizVal === "quiz_bonding") {
+                currentQuizData = quizBonding;
+                currentQuizTitle = "Bài tập 1: Phân tử - Liên kết hóa học";
             } else {
                 currentQuizData = quizElement;
                 currentQuizTitle = "Nguyên tố hóa học";
@@ -436,10 +963,30 @@
                         answersHtml += `
                             <label class="flex items-start p-3 border border-gray-200 rounded-xl cursor-pointer hover:bg-indigo-50 hover:border-indigo-300 transition duration-150">
                                 <input type="radio" name="question_${q.id}" value="${opt.key}" 
-                                    onchange="selectAnswer(${q.id}, '${opt.key}')" 
+                                    onchange="selectAnswer('${q.id}', '${opt.key}')" 
                                     class="mt-1 w-4 h-4 text-indigo-600 focus:ring-indigo-500 border-gray-300">
                                 <span class="ml-3 text-sm text-gray-700 font-medium"><b>${opt.key}.</b> ${opt.text}</span>
                             </label>
+                        `;
+                    });
+                    answersHtml += `</div>`;
+                } else if (q.type === "tf_group") {
+                    answersHtml = `<div class="space-y-3 pt-2">`;
+                    q.items.forEach(item => {
+                        answersHtml += `
+                            <div class="p-3 bg-gray-50 rounded-lg border border-gray-200 flex flex-col md:flex-row md:items-center justify-between gap-3">
+                                <span class="text-sm font-medium text-gray-700">${item.text}</span>
+                                <div class="flex items-center space-x-4 shrink-0">
+                                    <label class="flex items-center space-x-1.5 cursor-pointer">
+                                        <input type="radio" name="tf_${item.id}" value="Đ" onchange="selectAnswer('${item.id}', 'Đ')" class="w-4 h-4 text-emerald-600 focus:ring-emerald-500">
+                                        <span class="text-xs font-bold text-emerald-700">Đúng</span>
+                                    </label>
+                                    <label class="flex items-center space-x-1.5 cursor-pointer">
+                                        <input type="radio" name="tf_${item.id}" value="S" onchange="selectAnswer('${item.id}', 'S')" class="w-4 h-4 text-red-600 focus:ring-red-500">
+                                        <span class="text-xs font-bold text-red-700">Sai</span>
+                                    </label>
+                                </div>
+                            </div>
                         `;
                     });
                     answersHtml += `</div>`;
@@ -447,8 +994,8 @@
                     answersHtml = `
                         <div class="pt-2">
                             <input type="text" id="short_input_${q.id}" 
-                                oninput="saveShortAnswer(${q.id}, this.value)" 
-                                placeholder="Nhập câu trả lời của bạn vào đây..."
+                                oninput="saveShortAnswer('${q.id}', this.value)" 
+                                placeholder="Nhập đáp án của bạn..."
                                 class="w-full md:w-2/3 px-4 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none text-gray-800 text-sm">
                         </div>
                     `;
@@ -457,7 +1004,7 @@
                 qCard.innerHTML = `
                     <div class="flex items-start justify-between gap-2 border-b border-gray-100 pb-3">
                         <span class="inline-block bg-indigo-100 text-indigo-700 text-xs font-bold px-2.5 py-1 rounded-md">
-                            Câu ${index + 1} / ${currentQuizData.length} (${q.type === 'mcq' ? 'Trắc nghiệm' : 'Trả lời ngắn'})
+                            Câu ${index + 1} / ${currentQuizData.length}
                         </span>
                         <span id="status_q_${q.id}" class="text-xs font-semibold text-gray-400">Chưa làm</span>
                     </div>
@@ -469,44 +1016,83 @@
 
                 container.appendChild(qCard);
             });
+
+            calculateTotalItems();
+            updateProgress();
         }
 
-        function selectAnswer(qId, key) {
-            userAnswers[qId] = key;
-            updateStatus(qId, true);
+        function calculateTotalItems() {
+            totalQuestionItems = 0;
+            currentQuizData.forEach(q => {
+                if (q.type === "tf_group") {
+                    totalQuestionItems += q.items.length;
+                } else {
+                    totalQuestionItems += 1;
+                }
+            });
         }
 
-        function saveShortAnswer(qId, val) {
+        function selectAnswer(keyId, val) {
+            userAnswers[keyId] = val;
+            updateProgress();
+        }
+
+        function saveShortAnswer(keyId, val) {
             if (val.trim() !== "") {
-                userAnswers[qId] = val.trim();
-                updateStatus(qId, true);
+                userAnswers[keyId] = val.trim();
             } else {
-                delete userAnswers[qId];
-                updateStatus(qId, false);
+                delete userAnswers[keyId];
             }
+            updateProgress();
         }
 
-        function updateStatus(qId, isAnswered) {
-            const statusElem = document.getElementById(`status_q_${qId}`);
-            if (isAnswered) {
-                statusElem.innerText = "Đã chọn";
-                statusElem.className = "text-xs font-semibold text-emerald-600 flex items-center space-x-1";
-                statusElem.innerHTML = `<i class="fa-solid fa-check-circle"></i> <span>Đã chọn</span>`;
-            } else {
-                statusElem.innerText = "Chưa làm";
-                statusElem.className = "text-xs font-semibold text-gray-400";
-            }
+        function updateProgress() {
+            let answeredCount = 0;
+            currentQuizData.forEach(q => {
+                const statusElem = document.getElementById(`status_q_${q.id}`);
+                if (q.type === "mcq" || q.type === "short") {
+                    if (userAnswers[q.id]) {
+                        answeredCount++;
+                        if (statusElem) {
+                            statusElem.className = "text-xs font-semibold text-emerald-600 flex items-center space-x-1";
+                            statusElem.innerHTML = `<i class="fa-solid fa-check-circle"></i> <span>Đã trả lời</span>`;
+                        }
+                    } else if (statusElem) {
+                        statusElem.className = "text-xs font-semibold text-gray-400";
+                        statusElem.innerText = "Chưa làm";
+                    }
+                } else if (q.type === "tf_group") {
+                    let subAnswered = 0;
+                    q.items.forEach(item => {
+                        if (userAnswers[item.id]) {
+                            subAnswered++;
+                            answeredCount++;
+                        }
+                    });
+                    if (statusElem) {
+                        if (subAnswered === q.items.length) {
+                            statusElem.className = "text-xs font-semibold text-emerald-600 flex items-center space-x-1";
+                            statusElem.innerHTML = `<i class="fa-solid fa-check-circle"></i> <span>Hoàn thành (${subAnswered}/${q.items.length})</span>`;
+                        } else if (subAnswered > 0) {
+                            statusElem.className = "text-xs font-semibold text-amber-600";
+                            statusElem.innerText = `Đang làm (${subAnswered}/${q.items.length})`;
+                        } else {
+                            statusElem.className = "text-xs font-semibold text-gray-400";
+                            statusElem.innerText = "Chưa làm";
+                        }
+                    }
+                }
+            });
 
-            const answeredCount = Object.keys(userAnswers).length;
-            const progressPercent = (answeredCount / currentQuizData.length) * 100;
+            const progressPercent = (answeredCount / totalQuestionItems) * 100;
             document.getElementById('progress-bar').style.width = `${progressPercent}%`;
-            document.getElementById('progress-text').innerText = `${answeredCount}/${currentQuizData.length} câu`;
+            document.getElementById('progress-text').innerText = `${answeredCount}/${totalQuestionItems} mục`;
         }
 
         function confirmSubmit() {
-            const answeredCount = Object.keys(userAnswers).length;
-            if (answeredCount < currentQuizData.length) {
-                if (!confirm(`Bạn mới hoàn thành ${answeredCount}/${currentQuizData.length} câu. Bạn có chắc chắn muốn nộp bài ngay không?`)) {
+            let answeredCount = Object.keys(userAnswers).length;
+            if (answeredCount < totalQuestionItems) {
+                if (!confirm(`Bạn mới hoàn thành ${answeredCount}/${totalQuestionItems} mục. Bạn có chắc chắn muốn nộp bài ngay không?`)) {
                     return;
                 }
             }
@@ -522,26 +1108,29 @@
 
             correctCount = 0;
             currentQuizData.forEach(q => {
-                const userAns = userAnswers[q.id];
                 if (q.type === "mcq") {
-                    if (userAns === q.correct) correctCount++;
+                    if (userAnswers[q.id] === q.correct) correctCount++;
                 } else if (q.type === "short") {
-                    if (userAns) {
-                        const cleanUser = userAns.toString().toLowerCase().replace(/\s+/g, '');
+                    const uAns = userAnswers[q.id];
+                    if (uAns) {
+                        const cleanUser = uAns.toString().toLowerCase().replace(/\s+/g, '');
                         const cleanCorrect = q.correct.toString().toLowerCase().replace(/\s+/g, '');
                         if (cleanUser === cleanCorrect) correctCount++;
                     }
+                } else if (q.type === "tf_group") {
+                    q.items.forEach(item => {
+                        if (userAnswers[item.id] === item.correct) correctCount++;
+                    });
                 }
             });
 
-            const rawScore = (correctCount / currentQuizData.length) * 10;
+            const rawScore = (correctCount / totalQuestionItems) * 10;
             roundedScore = rawScore.toFixed(2);
 
             document.getElementById('screen-quiz').classList.add('hidden');
             document.getElementById('header-timer').classList.add('hidden');
             document.getElementById('screen-result').classList.remove('hidden');
 
-            document.getElementById('result-quiz-name').innerText = currentQuizTitle;
             document.getElementById('text-student-name').innerText = studentName;
             document.getElementById('text-quiz-title').innerText = currentQuizTitle;
             document.getElementById('text-duration').innerText = durationFormatted;
@@ -550,7 +1139,7 @@
         }
 
         function copyResultText() {
-            const textToCopy = `=== BÁO CÁO KẾT QUẢ BÀI TẬP ===\n- Họ và tên: ${studentName}\n- Bài kiểm tra: ${currentQuizTitle}\n- Thời gian làm bài: ${durationFormatted}\n- Thời gian nộp: ${submissionTimeStamp}\n- Điểm số: ${roundedScore}\n- Số câu đúng: ${correctCount}/${currentQuizData.length}`;
+            const textToCopy = `=== BÁO CÁO KẾT QUẢ BÀI TẬP ===\n- Họ và tên: ${studentName}\n- Bài kiểm tra: ${currentQuizTitle}\n- Thời gian làm bài: ${durationFormatted}\n- Thời gian nộp: ${submissionTimeStamp}\n- Điểm số: ${roundedScore}\n- Tỉ lệ đúng: ${correctCount}/${totalQuestionItems}`;
             navigator.clipboard.writeText(textToCopy).then(() => {
                 alert("Đã sao chép kết quả bài làm vào khay nhớ tạm!");
             }).catch(() => {

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QuiizzApp - Bài Tập Online</title>
+    <title>AtomicWeb - Bài Tập Trên Web</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Font Awesome Icons -->
@@ -36,18 +36,18 @@
     <header class="bg-indigo-600 text-white shadow-md sticky top-0 z-40">
         <div class="max-w-4xl mx-auto px-4 py-3 flex justify-between items-center">
             <div class="flex items-center space-x-3">
-                <i class="fa-solid fa-graduation-cap text-2xl text-yellow-300"></i>
-                <h1 class="font-bold text-lg md:text-xl tracking-wide">QuiizzApp - Bài Tập Online</h1>
+                <i class="fa-solid fa-atom text-2xl text-yellow-300 animate-spin" style="animation-duration: 8s;"></i>
+                <h1 class="font-bold text-lg md:text-xl tracking-wide">AtomicWeb - Bài Tập Trên Web</h1>
             </div>
             <div class="flex items-center space-x-3">
                 <div id="header-timer" class="hidden flex items-center space-x-2 bg-indigo-700 px-3 py-1.5 rounded-lg text-sm font-semibold">
                     <i class="fa-regular fa-clock text-yellow-300"></i>
                     <span id="timer-display">00:00</span>
                 </div>
-                <!-- Nút mở trợ lý Chemistry trên Header -->
+                <!-- Nút mở trợ lý Chemistry hình nguyên tử -->
                 <button onclick="toggleChemistryChat()" class="bg-gradient-to-r from-purple-500 to-indigo-500 hover:from-purple-600 hover:to-indigo-600 text-white px-3.5 py-1.5 rounded-lg text-sm font-bold shadow flex items-center space-x-2 transition">
-                    <i class="fa-solid fa-robot text-yellow-300"></i>
-                    <span class="hidden sm:inline">Trợ lý Chemistry</span>
+                    <i class="fa-solid fa-atom text-yellow-300 animate-spin" style="animation-duration: 8s;"></i>
+                    <span class="hidden sm:inline">Chemistry</span>
                 </button>
             </div>
         </div>
@@ -194,18 +194,18 @@
 
     </main>
 
-    <!-- TRỢ LÝ ẢO CHEMISTRY - MODAL CHAT -->
+    <!-- TRỢ LÝ ẢO CHEMISTRY (HÌNH NGUYÊN TỬ) - MODAL CHAT -->
     <div id="chemistry-modal" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center p-4">
         <div class="bg-white w-full max-w-2xl rounded-2xl shadow-2xl flex flex-col h-[85vh] md:h-[80vh] overflow-hidden border border-gray-200 animate-fadeIn">
             <!-- Modal Header -->
             <div class="bg-gradient-to-r from-purple-600 to-indigo-600 text-white px-5 py-4 flex justify-between items-center shadow">
                 <div class="flex items-center space-x-3">
                     <div class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center text-xl text-yellow-300">
-                        <i class="fa-solid fa-robot"></i>
+                        <i class="fa-solid fa-atom animate-spin" style="animation-duration: 8s;"></i>
                     </div>
                     <div>
-                        <h3 class="font-bold text-lg">Trợ lý ảo Chemistry</h3>
-                        <p class="text-xs text-purple-200">Sẵn sàng hướng dẫn cách chọn đáp án & giải bài tập</p>
+                        <h3 class="font-bold text-lg">Trợ lý Chemistry</h3>
+                        <p class="text-xs text-purple-200">Trợ lý giải đáp lịch cập nhật & hỗ trợ kỹ thuật</p>
                     </div>
                 </div>
                 <button onclick="toggleChemistryChat()" class="text-white hover:text-gray-200 text-xl font-bold w-9 h-9 flex items-center justify-center rounded-full hover:bg-white/10 transition">
@@ -213,11 +213,13 @@
                 </button>
             </div>
 
-            <!-- Quick Suggestions / 50 Scenarios Selector -->
+            <!-- Menu chọn câu hỏi gợi ý nhanh -->
             <div class="bg-purple-50 px-4 py-2.5 border-b border-purple-100 flex items-center justify-between text-xs text-purple-700">
-                <span class="font-semibold"><i class="fa-solid fa-lightbulb text-amber-500 mr-1"></i> Gợi ý tình huống hỏi nhanh:</span>
-                <select id="scenario-selector" onchange="selectScenario(this.value)" class="bg-white border border-purple-200 rounded-lg px-2.5 py-1 text-xs text-purple-900 font-medium outline-none focus:ring-1 focus:ring-purple-500 max-w-[240px] truncate">
-                    <option value="">-- Chọn 1 trong 50 tình huống hỏi --</option>
+                <span class="font-semibold"><i class="fa-solid fa-lightbulb text-amber-500 mr-1"></i> Chọn câu hỏi gợi ý:</span>
+                <select id="scenario-selector" onchange="selectScenario(this.value)" class="bg-white border border-purple-200 rounded-lg px-2.5 py-1 text-xs text-purple-900 font-medium outline-none focus:ring-1 focus:ring-purple-500 max-w-[280px] truncate">
+                    <option value="">-- Chọn tình huống trợ giúp --</option>
+                    <option value="0">1. Khi nào web sẽ có thêm bài tập?</option>
+                    <option value="1">2. Web bị lỗi / Không mở được</option>
                 </select>
             </div>
 
@@ -225,17 +227,17 @@
             <div id="chat-messages" class="flex-1 p-4 overflow-y-auto space-y-4 custom-scrollbar bg-slate-50 text-sm">
                 <div class="flex items-start space-x-3">
                     <div class="w-8 h-8 rounded-full bg-purple-600 text-white flex items-center justify-center shrink-0 font-bold text-xs">
-                        <i class="fa-solid fa-robot"></i>
+                        <i class="fa-solid fa-atom"></i>
                     </div>
                     <div class="bg-white p-3.5 rounded-2xl shadow-sm border border-gray-100 max-w-[85%] text-gray-700 leading-relaxed">
-                        Chào bạn! Tôi là <b>Chemistry</b> - trợ lý ảo môn Khoa học tự nhiên & Hóa học. Bạn cần tôi hướng dẫn cách chọn đáp án phần nào hay muốn giải bài tập dạng nào? Hãy chọn câu hỏi gợi ý ở trên hoặc nhắn trực tiếp cho tôi nhé!
+                        Chào leequangg! Tôi là trợ lý <b>Chemistry</b>. Bạn có thể chọn nhanh các câu hỏi gợi ý bên trên hoặc nhập trực tiếp tin nhắn vào khung bên dưới để được trợ giúp nhé!
                     </div>
                 </div>
             </div>
 
             <!-- Chat Input Form -->
             <form id="chat-form" onsubmit="event.preventDefault(); sendChemistryMessage();" class="p-3 bg-white border-t border-gray-200 flex items-center space-x-2">
-                <input type="text" id="chat-input" placeholder="Hỏi Chemistry cách chọn đáp án, công thức, mẹo giải..."
+                <input type="text" id="chat-input" placeholder="Hỏi Chemistry..."
                     class="flex-1 px-4 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none text-sm text-gray-800">
                 <button type="submit" class="bg-purple-600 hover:bg-purple-700 text-white px-5 py-2.5 rounded-xl font-bold transition flex items-center justify-center text-sm shadow">
                     <i class="fa-solid fa-paper-plane"></i>
@@ -246,92 +248,38 @@
 
     <!-- Footer -->
     <footer class="bg-white border-t border-gray-200 py-4 text-center text-xs text-gray-500">
-        <p>© 2026 QuiizzApp - Bài Tập Online. All rights reserved.</p>
+        <p>© 2026 AtomicWeb - Bài Tập Trên Web. All rights reserved.</p>
     </footer>
 
     <!-- JavaScript Logic -->
     <script>
         // ==========================================
-        // 50 TÌNH HUỐNG HỎI & HƯỚNG DẪN TỪ CHEMISTRY
+        // 2 TÌNH HUỐNG HỎI & TRẢ LỜI CỦA CHEMISTRY
         // ==========================================
         const chemistryScenarios = [
-            // Chủ đề 1: Kĩ năng quan sát & đo lường (1-10)
-            { q: "Cách chọn đáp án bài kĩ năng quan sát và thu thập thông tin?", a: "Để chọn đúng kĩ năng quan sát, hãy nhớ quan sát là việc sử dụng trực tiếp các giác quan (mắt, tai, mũi...) hoặc dụng cụ đo để thu nhận thông tin về sự vật, hiện tượng mà không làm thay đổi bản chất của chúng." },
-            { q: "Cách đặt mắt đúng khi đo thể tích chất lỏng bằng ống đong?", a: "Quy tắc vàng: Luôn đặt mắt nhìn NGANG với mực chất lỏng (mặt lõm hoặc mặt lồi của chất lỏng), tuyệt đối không nhìn từ trên xuống hoặc từ dưới lên để tránh sai số thị sai." },
-            { q: "Cách phân biệt kĩ năng quan sát và kĩ năng dự báo?", a: "Quan sát là ghi nhận thực tế hiện tại đang diễn ra; còn dự báo là đưa ra phán đoán, tiên đoán về kết quả hoặc hiện tượng sẽ xảy ra trong tương lai dựa trên dữ liệu thu thập được." },
-            { q: "Làm sao để chọn dụng cụ đo thể tích phù hợp?", a: "Chọn bình đong (ống đong) có GHĐ (Giới hạn đo) lớn hơn thể tích cần đo một chút và ĐCĐ (Độ chia nhỏ nhất) càng nhỏ thì đo càng chính xác." },
-            { q: "Cách tính sai số trong các phép đo thực hành?", a: "Sai số tuyệt đối của một lần đo bằng trị tuyệt đối của hiệu giữa giá trị trung bình và giá trị của lần đo đó. Thường trong trắc nghiệm lớp 6, bạn chọn kết quả đọc trực tiếp trên vạch chia." },
-            { q: "Khi đo chiều dài bằng thước, cách đặt thước thế nào là chuẩn?", a: "Đặt thước dọc theo chiều dài cần đo, vạch số 0 của thước đặt trùng với một đầu của vật, mắt nhìn vuông góc với cạnh thước ở đầu kia." },
-            { q: "Ý nghĩa của giới hạn đo (GHĐ) và độ chia nhỏ nhất (ĐCNH)?", a: "GHĐ là giá trị lớn nhất ghi trên dụng cụ đo; ĐCNH là giá trị giữa hai vạch chia liên tiếp trên dụng cụ." },
-            { q: "Khi nào dùng cân điện tử thay cho cân Rô-béc-vua?", a: "Cân điện tử được dùng khi cần độ chính xác cao và thao tác nhanh trong các thí nghiệm hiện đại." },
-            { q: "Kĩ năng phân loại trong nghiên cứu khoa học là gì?", a: "Là sắp xếp các đối tượng, sự vật có chung đặc điểm thành từng nhóm theo các tiêu chí nhất định." },
-            { q: "Bước nào quan trọng nhất trong phương pháp tìm hiểu tự nhiên?", a: "Bước đặt câu hỏi nghiên cứu và lập kế hoạch kiểm tra giả thuyết là cốt lõi để khám phá khoa học." },
-
-            // Chủ đề 2: Cấu tạo nguyên tử (11-25)
-            { q: "Hạt nhân nguyên tử cấu tạo gồm những hạt nào?", a: "Hạt nhân được cấu tạo bởi 2 loại hạt là Proton (mang điện dương) và Neutron (không mang điện). Riêng nguyên tử Hydrogen thông thường không có neutron." },
-            { q: "Mối quan hệ giữa số proton, số electron và số hiệu nguyên tử Z?", a: "Trong nguyên tử trung hòa về điện: Số proton (p) = Số electron (e) = Số hiệu nguyên tử (Z)." },
-            { q: "Cách tính tổng số hạt cơ bản (p, n, e) trong nguyên tử?", a: "Tổng số hạt = p + n + e. Vì p = e nên Tổng số hạt = 2p + n. (Hoặc tính theo điện tích hạt nhân)." },
-            { q: "Mẹo giải bài toán tổng số hạt (p, n, e) cho trước tổng và điều kiện?", a: "Sử dụng bất đẳng thức nguyên tử: p <= n <= 1.5p. Từ tổng hạt 2p + n = S, bạn thay thế và lập luận tìm ra giá trị p và n chính xác." },
-            { q: "Vì sao khối lượng nguyên tử tập trung hầu như toàn bộ ở hạt nhân?", a: "Vì khối lượng của hạt proton và neutron xấp xỉ 1 amu, trong khi khối lượng electron cực kì nhỏ (chỉ bằng khoảng 1/1836 khối lượng proton) nên ta có thể bỏ qua." },
-            { q: "Thế nào là nguyên tử trung hòa về điện?", a: "Là nguyên tử có số hạt mang điện dương (proton ở hạt nhân) đúng bằng số hạt mang điện âm (electron ở lớp vỏ)." },
-            { q: "Ion âm được hình thành như thế nào từ nguyên tử?", a: "Ion âm được tạo thành khi nguyên tử nhận thêm electron vào lớp vỏ (số e nhiều hơn số p)." },
-            { q: "Ion dương (như X2+) được hình thành như thế nào?", a: "Ion dương được tạo thành khi nguyên tử nhường đi electron (với X2+ là nhường đi 2 electron, số p không đổi)." },
-            { q: "Cách tính số hạt mang điện và không mang điện trong ion?", a: "Số hạt mang điện trong ion gồm (số proton x 2 + số electron còn lại sau khi nhường/nhận). Số hạt không mang điện (neutron) giữ nguyên không đổi." },
-            { q: "Đơn vị đo khối lượng nguyên tử (amu) là gì?", a: "1 amu bằng 1/12 khối lượng của một nguyên tử carbon-12 (khoảng 1.66 x 10^-24 gam)." },
-            { q: "Khối lượng nguyên tử của Carbon bằng bao nhiêu?", a: "Nguyên tử Carbon có khối lượng nguyên tử quy ước là 12 amu." },
-            { q: "Nguyên tử Oxygen có khối lượng bao nhiêu?", a: "Nguyên tử Oxygen có khối lượng nguyên tử quy ước là 16 amu." },
-            { q: "Nguyên tử Hydrogen có khối lượng bao nhiêu?", a: "Nguyên tử Hydrogen có khối lượng nguyên tử quy ước là 1 amu." },
-            { q: "Điện tích hạt nhân được tính bằng gì?", a: "Điện tích hạt nhân bằng tổng điện tích của các proton trong hạt nhân, kí hiệu là +Z (với Z là số proton)." },
-            { q: "Các lớp electron ở vỏ nguyên tử sắp xếp thế nào?", a: "Các electron ở lớp vỏ được sắp xếp thành từng lớp từ trong ra ngoài theo mức năng lượng từ thấp đến cao (tối đa lớp 1 có 2e, lớp 2 có 8e...)." },
-
-            // Chủ đề 3: Nguyên tố hóa học & Bảng tuần hoàn (26-38)
-            { q: "Thế nào là một nguyên tố hóa học?", a: "Tập hợp tất cả các nguyên tử có cùng số proton trong hạt nhân đều thuộc cùng một nguyên tố hóa học." },
-            { q: "Cách nhận biết các nguyên tử thuộc cùng một nguyên tố hóa học?", a: "Chúng bắt buộc phải có CÙNG SỐ PROTON trong hạt nhân, dù số neutron có thể khác nhau (đây gọi là các đồng vị)." },
-            { q: "Ký hiệu hóa học được quy ước viết như thế nào?", a: "Viết bằng 1 hoặc 2 chữ cái: Chữ cái đầu tiên VIẾT HOA (ví dụ: C, N, O), chữ cái thứ hai (nếu có) viết thường (ví dụ: Na, Ca, Cl)." },
-            { q: "Nguyên tắc sắp xếp các nguyên tố trong Bảng tuần hoàn hiện nay?", a: "Các nguyên tố được sắp xếp theo chiều tăng dần của ĐIỆN TÍCH HẠT NHÂN (số proton)." },
-            { q: "Ý nghĩa của số thứ tự ô nguyên tố trong Bảng tuần hoàn?", a: "Số thứ tự ô nguyên tố = Số hiệu nguyên tử = Số proton = Số electron trong nguyên tử trung hòa." },
-            { q: "Chu kì trong Bảng tuần hoàn là gì?", a: "Là hàng ngang chứa các nguyên tố mà nguyên tử của chúng có cùng số lớp electron." },
-            { q: "Nhóm trong Bảng tuần hoàn là gì?", a: "Là cột dọc chứa các nguyên tố có tính chất hóa học tương tự nhau, thường có cùng số electron ở lớp ngoài cùng." },
-            { q: "Nguyên tố kim loại thường nằm ở vị trí nào trong bảng tuần hoàn?", a: "Chiếm phần lớn phía bên trái và ở giữa bảng tuần hoàn." },
-            { q: "Nguyên tố phi kim thường nằm ở đâu?", a: "Nằm ở góc phía trên bên phải của bảng tuần hoàn." },
-            { q: "Đặc điểm của các nguyên tố khí hiếm là gì?", a: "Nằm ở nhóm cuối cùng (nhóm 18 hoặc VIIIA), lớp electron ngoài cùng rất bền vững (8e, riêng He có 2e) nên rất trơ về mặt hóa học." },
-            { q: "Kí hiệu hóa học của Natri (Sodium), Kali (Potassium), Canxi là gì?", a: "Natri là Na, Kali là K, Canxi là Ca." },
-            { q: "Kí hiệu của các phi kim phổ biến như Carbon, Nitrogen, Oxygen, Sắt?", a: "Carbon (C), Nitrogen (N), Oxygen (O), Sắt (Fe)." },
-            { q: "Vì sao các nguyên tố trong cùng một nhóm lại có tính chất hóa học tương tự nhau?", a: "Vì chúng có cùng số electron ở lớp ngoài cùng, đây là yếu tố quyết định khả năng tham gia liên kết hóa học." },
-
-            // Chủ đề 4: Phân tử, Khối lượng phân tử & Hóa trị (39-45)
-            { q: "Phân tử là gì và mang tính chất gì?", a: "Phân tử là hạt đại diện cho chất, gồm một số nguyên tử liên kết với nhau và mang đầy đủ TÍNH CHẤT HÓA HỌC của chất đó." },
-            { q: "Cách tính khối lượng phân tử của một chất?", a: "Khối lượng phân tử bằng TỔNG khối lượng các nguyên tử có trong phân tử (lấy nguyên tử khối nhân với số lượng từng nguyên tử rồi cộng lại, đơn vị là amu)." },
-            { q: "Phân biệt đơn chất và hợp chất?", a: "Đơn chất là chất được tạo nên từ MỘT nguyên tố hóa học (vd: O2, N2, Fe); Hợp chất là chất được tạo nên từ HAI HAY NHIỀU nguyên tố hóa học (vd: H2O, NaCl, CO2)." },
-            { q: "Công thức hóa học cho biết điều gì?", a: "Cho biết thành phần nguyên tố, số lượng nguyên tử của mỗi nguyên tố có trong phân tử và tính được khối lượng phân tử." },
-            { q: "Khí methane (CH4) có khối lượng phân tử là bao nhiêu?", a: "M = 12 (của C) + 4 x 1 (của H) = 16 amu." },
-            { q: "Khối lượng phân tử của nước (H2O) là bao nhiêu?", a: "M = 2 x 1 (của H) + 16 (của O) = 18 amu." },
-            { q: "Khối lượng phân tử của khí carbon dioxide (CO2) là bao nhiêu?", a: "M = 12 (của C) + 2 x 16 (của O) = 44 amu." },
-
-            // Chủ đề 5: Liên kết hóa học (Ion & Cộng hóa trị) (46-50)
-            { q: "Liên kết cộng hóa trị được hình thành như thế nào?", a: "Được hình thành giữa các nguyên tử (thường là phi kim) bằng cách DÙNG CHUNG một hay nhiều cặp electron." },
-            { q: "Liên kết ion được hình thành như thế nào?", a: "Được hình thành do LỰC HÚT TĨNH ĐIỆN giữa các ion mang điện tích trái dấu (ion dương của kim loại và ion âm của phi kim)." },
-            { q: "Tính chất vật lý đặc trưng của hợp chất ion (như NaCl)?", a: "Thường ở trạng thái rắn ở nhiệt độ thường, có nhiệt độ nóng chảy và sôi cao, hòa tan trong nước tạo dung dịch dẫn được điện." },
-            { q: "Tính chất của các chất có liên kết cộng hóa trị (như H2O, CO2)?", a: "Có thể ở trạng thái khí, lỏng hoặc rắn; nhiệt độ nóng chảy và sôi thường thấp hơn hợp chất ion." },
-            { q: "Quy tắc octet (đạt cấu hình khí hiếm) trong liên kết hóa học là gì?", a: "Các nguyên tử xu hướng nhường, nhận hoặc góp chung electron để đạt cấu hình vỏ bền vững giống khí hiếm (thường có 8 electron ở lớp ngoài cùng)." }
+            {
+                q: "Khi nào web sẽ có thêm bài tập?",
+                a: "Vào mỗi sáng Thứ 7 hàng tuần web sẽ có thêm bài tập mới nhé!"
+            },
+            {
+                q: "Web tôi bị lỗi/ ko mở đc",
+                a: "Trên iPhone bạn có thể copy link và dán vào Google (hoặc Safari), trên Samsung có thể ấn trực tiếp. Nếu không được hãy báo cho Admin nhé!"
+            }
         ];
 
-        // Khởi tạo danh sách 50 tình huống vào Select Box
-        function initScenarioSelector() {
-            const selector = document.getElementById('scenario-selector');
-            chemistryScenarios.forEach((item, index) => {
-                const opt = document.createElement('option');
-                opt.value = index;
-                opt.text = `Tình huống ${index + 1}: ${item.q}`;
-                selector.appendChild(opt);
-            });
-        }
-
+        // Khi người dùng chọn 1 trong 2 tình huống ở menu thả xuống
         function selectScenario(index) {
             if (index === "") return;
-            const item = chemistryScenarios[index];
-            appendChatMessage(item.q, 'user');
-            appendChatMessage(item.a, 'bot');
+            const item = chemistryScenarios[parseInt(index)];
+            
+            // Tự động điền gợi ý vào thanh tin nhắn
+            const chatInput = document.getElementById('chat-input');
+            chatInput.value = item.q;
+            
+            // Tự động gửi luôn
+            sendChemistryMessage();
+            
+            // Reset dropdown
             document.getElementById('scenario-selector').value = "";
         }
 
@@ -350,23 +298,27 @@
             appendChatMessage(text, 'user');
             input.value = "";
 
-            // Xử lý phản hồi thông minh từ Chemistry dựa trên từ khóa
             setTimeout(() => {
                 let reply = findBestChemistryAnswer(text);
                 appendChatMessage(reply, 'bot');
-            }, 400);
+            }, 300);
         }
 
         function findBestChemistryAnswer(query) {
             const lowerQ = query.toLowerCase();
-            // Tìm kiếm khớp từ khóa trong 50 tình huống
-            for (let item of chemistryScenarios) {
-                if (item.q.toLowerCase().includes(lowerQ) || lowerQ.split(' ').some(word => word.length > 3 && item.q.toLowerCase().includes(word))) {
-                    return item.a;
-                }
+
+            // Kiểm tra Tình huống 1: Hỏi về bài tập mới / thêm bài
+            if (lowerQ.includes("bài tập") || lowerQ.includes("khi nào") || lowerQ.includes("thêm bài") || lowerQ.includes("sáng t7")) {
+                return chemistryScenarios[0].a;
             }
-            // Trả lời mặc định thông minh nếu không khớp chính xác
-            return `Chào bạn! Về câu hỏi "${query}", trợ lý Chemistry khuyên bạn hãy đọc kĩ đề bài, xác định rõ dữ kiện đã cho và đại lượng cần tìm. Nếu là bài toán tính toán hạt (p, n, e), hãy nhớ công thức tổng hạt 2p + n = Tổng và bất đẳng thức p <= n <= 1.5p nhé!`;
+            
+            // Kiểm tra Tình huống 2: Lỗi / không mở được
+            if (lowerQ.includes("lỗi") || lowerQ.includes("không mở") || lowerQ.includes("ko mở") || lowerQ.includes("iphone") || lowerQ.includes("samsung") || lowerQ.includes("admin")) {
+                return chemistryScenarios[1].a;
+            }
+
+            // Trả lời tổng hợp nếu người dùng gõ từ khóa khác
+            return "Tôi hỗ trợ 2 thông tin chính:\n1. Bài tập mới: Cập nhật vào mỗi sáng Thứ 7 hàng tuần.\n2. Lỗi truy cập: Trên iPhone hãy copy link dán vào Google/Safari, trên Samsung ấn trực tiếp. Nếu vẫn không được hãy báo Admin nhé!";
         }
 
         function appendChatMessage(text, sender) {
@@ -387,9 +339,9 @@
                 div.className = "flex items-start space-x-3";
                 div.innerHTML = `
                     <div class="w-8 h-8 rounded-full bg-purple-600 text-white flex items-center justify-center shrink-0 font-bold text-xs">
-                        <i class="fa-solid fa-robot"></i>
+                        <i class="fa-solid fa-atom"></i>
                     </div>
-                    <div class="bg-white p-3.5 rounded-2xl shadow-sm border border-gray-100 max-w-[85%] text-gray-700 leading-relaxed">
+                    <div class="bg-white p-3.5 rounded-2xl shadow-sm border border-gray-100 max-w-[85%] text-gray-700 leading-relaxed whitespace-pre-line">
                         ${text}
                     </div>
                 `;
@@ -900,11 +852,6 @@
         let totalQuestionItems = 0;
         let durationFormatted = "00:00";
         let submissionTimeStamp = "";
-
-        // Chạy khi tải trang
-        window.onload = function() {
-            initScenarioSelector();
-        };
 
         // Khởi chạy bài tập
         function startQuiz() {
